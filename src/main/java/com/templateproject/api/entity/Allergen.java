@@ -1,9 +1,8 @@
 package com.templateproject.api.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "allergens")
@@ -14,6 +13,12 @@ public class Allergen {
 
     @Column(name = "allergen_name")
     private String allergenName;
+
+    @ManyToMany
+    @JoinTable(name = "allergen_id_recipe",
+            joinColumns = @JoinColumn(name = "allergen_id"),
+            inverseJoinColumns = @JoinColumn(name = "id_recipe"))
+    private List<Recipe> recipes;
 
     public Allergen(Integer id, String allergenName) {
         this.id = id;

@@ -14,12 +14,8 @@ public class Recipe {
     @jakarta.persistence.Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_recipe", nullable = false)
-    private Long id_recipe;
+    private Integer id_recipe;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name="native", strategy = "native")
-    private Integer id;
 
     @Column(name = "recipe_name")
     @NotBlank
@@ -48,27 +44,19 @@ public class Recipe {
     private BigDecimal price;
 
     @Column(name = "imgUrl")
-
+    private String imgUrl;
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "diet_id")
-    private Diet diet;
+    @ManyToMany
+    @JoinColumn(name = "recipes")
+    private List<Allergen> allergens;
 
-    @ManyToOne
-    @JoinColumn(name = "allergen_id")
-    private Allergen allergen;
 
-    public Long getId_recipe() {
-        return id_recipe;
-    }
+    @ManyToMany(mappedBy = "recipes")
+    private List<Diet> diets;
 
-    public void setId_recipe(Long id_recipe) {
+    public Recipe(Integer id_recipe, String recipeName, String recipeType, CountryOfOrigin countryOfOrigin, Integer preTime, Integer cookTime, BigDecimal price, String description, List<Allergen> allergens, List<Diet> diets) {
         this.id_recipe = id_recipe;
-    }
-
-    public Recipe(Integer id, String recipeName, String recipeType, CountryOfOrigin countryOfOrigin, Integer preTime, Integer cookTime, BigDecimal price, String description, Diet diet, Allergen allergen) {
-        this.id = id;
         this.recipeName = recipeName;
         this.recipeType = recipeType;
         this.countryOfOrigin = countryOfOrigin;
@@ -76,20 +64,20 @@ public class Recipe {
         this.cookTime = cookTime;
         this.price = price;
         this.description = description;
-        this.diet = diet;
-        this.allergen = allergen;
+        this.allergens = allergens;
+        this.diets = diets;
     }
 
     public Recipe() {
 
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getId_recipe() {
+        return id_recipe;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId_recipe(Integer id_recipe) {
+        this.id_recipe = id_recipe;
     }
 
     public String getRecipeName() {
@@ -148,19 +136,19 @@ public class Recipe {
         this.description = description;
     }
 
-    public Diet getDiet() {
-        return diet;
+    public List<Allergen> getAllergens() {
+        return allergens;
     }
 
-    public void setDiet(Diet diet) {
-        this.diet = diet;
+    public void setAllergens(List<Allergen> allergens) {
+        this.allergens = allergens;
     }
 
-    public Allergen getAllergen() {
-        return allergen;
+    public List<Diet> getDiets() {
+        return diets;
     }
 
-    public void setAllergen(Allergen allergen) {
-        this.allergen = allergen;
+    public void setDiets(List<Diet> diets) {
+        this.diets = diets;
     }
 }

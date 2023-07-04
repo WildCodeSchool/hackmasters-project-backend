@@ -5,28 +5,32 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "diets")
-public class Diet {
+@Table(name = "steps")
+public class Step {
 
     @Id
     private Integer id;
 
-    @ManyToMany
-    @JoinTable(name = "diet_recipe",
-                joinColumns = @JoinColumn(name = "diet_id"),
-                inverseJoinColumns = @JoinColumn(name = "id_recipe"))
-    private List <Recipe> recipes;
+    @ManyToOne
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
 
     @Column(name = "step_description")
     private String stepDescription;
 
-    public Diet(Integer id, List<Recipe> recipes, String stepDescription) {
+    @ManyToMany
+    @JoinTable(name = "steps_recipe",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "id_recipe"))
+    private List<Recipe> recipes;
+
+    public Step(Integer id, Recipe recipe, String stepDescription) {
         this.id = id;
-        this.recipes = recipes;
+        this.recipe = recipe;
         this.stepDescription = stepDescription;
     }
 
-    public Diet() {
+    public Step() {
 
     }
 
@@ -38,12 +42,12 @@ public class Diet {
         this.id = id;
     }
 
-    public List<Recipe> getRecipes() {
-        return recipes;
+    public Recipe getRecipe() {
+        return recipe;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
     }
 
     public String getStepDescription() {

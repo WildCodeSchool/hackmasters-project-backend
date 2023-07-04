@@ -7,7 +7,7 @@ public class IngredientRecipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
@@ -17,7 +17,7 @@ public class IngredientRecipe {
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    public IngredientRecipe(Long id, Recipe recipe, Ingredient ingredient) {
+    public IngredientRecipe(Integer id, Recipe recipe, Ingredient ingredient) {
         this.id = id;
         this.recipe = recipe;
         this.ingredient = ingredient;
@@ -27,11 +27,11 @@ public class IngredientRecipe {
 
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

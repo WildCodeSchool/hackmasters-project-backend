@@ -1,9 +1,8 @@
 package com.templateproject.api.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "country_of_origin")
@@ -15,9 +14,14 @@ public class CountryOfOrigin {
     @Column(name = "country_name")
     private String countryName;
 
-    public CountryOfOrigin(Integer id, String countryName) {
+
+    @OneToMany (mappedBy = "countryOfOrigin" )
+    private List<Recipe> recipes;
+
+    public CountryOfOrigin(Integer id, String countryName, List<Recipe> recipes) {
         this.id = id;
         this.countryName = countryName;
+        this.recipes = recipes;
     }
 
     public CountryOfOrigin() {
@@ -40,4 +44,11 @@ public class CountryOfOrigin {
         this.countryName = countryName;
     }
 
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
+    }
 }
