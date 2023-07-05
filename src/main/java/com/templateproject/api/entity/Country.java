@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "country_of_origin")
-public class CountryOfOrigin {
+public class Country {
 
     @Id
     private Integer id;
@@ -18,13 +18,13 @@ public class CountryOfOrigin {
     @OneToMany (mappedBy = "countryOfOrigin" )
     private List<Recipe> recipes;
 
-    public CountryOfOrigin(Integer id, String countryName, List<Recipe> recipes) {
+    public Country(Integer id, String countryName, List<Recipe> recipes) {
         this.id = id;
         this.countryName = countryName;
         this.recipes = recipes;
     }
 
-    public CountryOfOrigin() {
+    public Country() {
 
     }
 

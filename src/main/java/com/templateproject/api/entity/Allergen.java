@@ -6,34 +6,22 @@ import java.util.List;
 
 @Entity
 @Table(name = "allergens")
-public class Allergen {
 
+public class Allergen {
     @Id
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @Column(name = "allergen_name")
     private String allergenName;
 
-    @ManyToMany
-    @JoinTable(name = "allergen_id_recipe",
-            joinColumns = @JoinColumn(name = "allergen_id"),
-            inverseJoinColumns = @JoinColumn(name = "id_recipe"))
-    private List<Recipe> recipes;
+    // Getters and setters
 
-    public Allergen(Integer id, String allergenName) {
-        this.id = id;
-        this.allergenName = allergenName;
-    }
-
-    public Allergen() {
-
-    }
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

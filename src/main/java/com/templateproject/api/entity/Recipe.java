@@ -1,83 +1,43 @@
 package com.templateproject.api.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
-@Table(name = "recipes")
 public class Recipe {
-    @jakarta.persistence.Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id_recipe", nullable = false)
-    private Integer id_recipe;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-
-    @Column(name = "recipe_name")
-    @NotBlank
     private String recipeName;
 
-    @Column(name = "recipe_type")
-    @NotBlank
-    private String recipeType;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, optional = false)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, optional = false)
+    @JoinColumn(name = "country_id")
+    private Country country;
 
-    @ManyToOne
-    @JoinColumn(name = "country_of_origin_id")
-    @NotBlank
-    private CountryOfOrigin countryOfOrigin;
+    private Integer prepTime;
 
-    @Column(name = "pre_time")
-    @NotBlank
-    private Integer preTime;
-
-    @Column(name = "cook_time")
-    @NotBlank
     private Integer cookTime;
 
-    @Column
-    @NotBlank
     private BigDecimal price;
 
-    @Column(name = "imgUrl")
     private String imgUrl;
+
     private String description;
 
-    @ManyToMany
-    @JoinColumn(name = "recipes")
-    private List<Allergen> allergens;
+    // Getters and setters
 
-
-    @ManyToMany(mappedBy = "recipes")
-    private List<Diet> diets;
-
-    public Recipe(Integer id_recipe, String recipeName, String recipeType, CountryOfOrigin countryOfOrigin, Integer preTime, Integer cookTime, BigDecimal price, String description, List<Allergen> allergens, List<Diet> diets) {
-        this.id_recipe = id_recipe;
-        this.recipeName = recipeName;
-        this.recipeType = recipeType;
-        this.countryOfOrigin = countryOfOrigin;
-        this.preTime = preTime;
-        this.cookTime = cookTime;
-        this.price = price;
-        this.description = description;
-        this.allergens = allergens;
-        this.diets = diets;
+    public Long getId() {
+        return id;
     }
 
-    public Recipe() {
-
-    }
-
-    public Integer getId_recipe() {
-        return id_recipe;
-    }
-
-    public void setId_recipe(Integer id_recipe) {
-        this.id_recipe = id_recipe;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getRecipeName() {
@@ -88,28 +48,28 @@ public class Recipe {
         this.recipeName = recipeName;
     }
 
-    public String getRecipeType() {
-        return recipeType;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setRecipeType(String recipeType) {
-        this.recipeType = recipeType;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public CountryOfOrigin getCountryOfOrigin() {
-        return countryOfOrigin;
+    public Country getCountry() {
+        return country;
     }
 
-    public void setCountryOfOrigin(CountryOfOrigin countryOfOrigin) {
-        this.countryOfOrigin = countryOfOrigin;
+    public void setCountry(Country country) {
+        this.country = country;
     }
 
-    public Integer getPreTime() {
-        return preTime;
+    public Integer getPrepTime() {
+        return prepTime;
     }
 
-    public void setPreTime(Integer preTime) {
-        this.preTime = preTime;
+    public void setPrepTime(Integer prepTime) {
+        this.prepTime = prepTime;
     }
 
     public Integer getCookTime() {
@@ -128,27 +88,19 @@ public class Recipe {
         this.price = price;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Allergen> getAllergens() {
-        return allergens;
-    }
-
-    public void setAllergens(List<Allergen> allergens) {
-        this.allergens = allergens;
-    }
-
-    public List<Diet> getDiets() {
-        return diets;
-    }
-
-    public void setDiets(List<Diet> diets) {
-        this.diets = diets;
     }
 }

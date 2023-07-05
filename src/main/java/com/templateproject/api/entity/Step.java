@@ -17,13 +17,6 @@ public class Step {
 
     @Column(name = "step_description")
     private String stepDescription;
-
-    @ManyToMany
-    @JoinTable(name = "steps_recipe",
-            joinColumns = @JoinColumn(name = "recipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "id_recipe"))
-    private List<Recipe> recipes;
-
     public Step(Integer id, Recipe recipe, String stepDescription) {
         this.id = id;
         this.recipe = recipe;

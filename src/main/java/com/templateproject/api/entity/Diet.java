@@ -5,52 +5,30 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "diets")
 public class Diet {
-
     @Id
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
-    @ManyToMany
-    @JoinTable(name = "diet_recipe",
-                joinColumns = @JoinColumn(name = "diet_id"),
-                inverseJoinColumns = @JoinColumn(name = "id_recipe"))
-    private List <Recipe> recipes;
+    @Column(name = "diet_name")
+    private String dietName;
 
-    @Column(name = "step_description")
-    private String stepDescription;
+    // Getters and setters
 
-    public Diet(Integer id, List<Recipe> recipes, String stepDescription) {
-        this.id = id;
-        this.recipes = recipes;
-        this.stepDescription = stepDescription;
-    }
-
-    public Diet() {
-
-    }
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public List<Recipe> getRecipes() {
-        return recipes;
+    public String getDietName() {
+        return dietName;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
-    }
-
-    public String getStepDescription() {
-        return stepDescription;
-    }
-
-    public void setStepDescription(String stepDescription) {
-        this.stepDescription = stepDescription;
+    public void setDietName(String dietName) {
+        this.dietName = dietName;
     }
 }
+
