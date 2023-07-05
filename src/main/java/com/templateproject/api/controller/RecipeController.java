@@ -1,11 +1,9 @@
 package com.templateproject.api.controller;
 
 import com.templateproject.api.repository.RecipeRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -28,4 +26,22 @@ public class RecipeController {
         return recipeRepository.findBySlug(slug).orElseThrow();
     }
 
+    @PostMapping("/add")
+    public Recipe addRecipe(String recipeName, Category category, Country country, int prepTime, int cookTime, BigDecimal price, String imgUrl, String description) {
+        Recipe recipe = new Recipe(recipeName, category, country, prepTime, cookTime, price, imgUrl, description);
+        return recipeRepository.save(recipe);
+    }
+
+    @PutMapping("/update/{id}")
+    public Recipe updateRecipe(@PathVariable Long id, String recipeName, Category category, Country country, int prepTime, int cookTime, BigDecimal price, String imgUrl, String description) {
+        Recipe recipe = recipeRepository.findById(id).orElseThrow();
+                recipe.setRecipeName(recipeName);
+                recipe.setCategory(category);
+                recipe.setCountry(country);
+                recipe.setPrepTime(prepTime);
+                recipe.setCookTime(cookTime);
+                recipe.setPrice(price);
+                recipe.setImgUrl(imgUrl);
+                recipe.setDescription(description);
+                return recipeRepository.save(recipe);
 }
