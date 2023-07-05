@@ -35,13 +35,19 @@ public class RecipeController {
     @PutMapping("/update/{id}")
     public Recipe updateRecipe(@PathVariable Long id, String recipeName, Category category, Country country, int prepTime, int cookTime, BigDecimal price, String imgUrl, String description) {
         Recipe recipe = recipeRepository.findById(id).orElseThrow();
-                recipe.setRecipeName(recipeName);
-                recipe.setCategory(category);
-                recipe.setCountry(country);
-                recipe.setPrepTime(prepTime);
-                recipe.setCookTime(cookTime);
-                recipe.setPrice(price);
-                recipe.setImgUrl(imgUrl);
-                recipe.setDescription(description);
-                return recipeRepository.save(recipe);
+        recipe.setRecipeName(recipeName);
+        recipe.setCategory(category);
+        recipe.setCountry(country);
+        recipe.setPrepTime(prepTime);
+        recipe.setCookTime(cookTime);
+        recipe.setPrice(price);
+        recipe.setImgUrl(imgUrl);
+        recipe.setDescription(description);
+        return recipeRepository.save(recipe);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteRecipe(@PathVariable Long id) {
+        recipeRepository.deleteById(id);
+    }
 }
