@@ -31,10 +31,6 @@ public class Step {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Recipe getRecipe() {
         return recipe;
     }

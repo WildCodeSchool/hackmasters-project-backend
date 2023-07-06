@@ -15,14 +15,8 @@ public class Allergen {
     @Column(name = "allergen_name")
     private String allergenName;
 
-    // Getters and setters
-
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getAllergenName() {

@@ -3,6 +3,7 @@ package com.templateproject.api.entity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 public class Recipe {
@@ -18,6 +19,8 @@ public class Recipe {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, optional = false)
     @JoinColumn(name = "country_id")
+
+
     private Country country;
 
     private Integer prepTime;
@@ -30,14 +33,52 @@ public class Recipe {
 
     private String description;
 
-    // Getters and setters
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<IngredientRecipe> ingredients;
+
+    public List<IngredientRecipe> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<IngredientRecipe> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public List<RecipeAllergen> getAllergens() {
+        return allergens;
+    }
+
+    public void setAllergens(List<RecipeAllergen> allergens) {
+        this.allergens = allergens;
+    }
+
+    public List<RecipeDiet> getDiets() {
+        return diets;
+    }
+
+    public void setDiets(List<RecipeDiet> diets) {
+        this.diets = diets;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
+    }
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<RecipeAllergen> allergens;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<RecipeDiet> diets;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<Step> steps;
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getRecipeName() {

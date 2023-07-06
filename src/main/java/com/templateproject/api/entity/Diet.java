@@ -19,10 +19,6 @@ public class Diet {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getDietName() {
         return dietName;
     }

@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "country_of_origin")
+@Table(name = "country")
 public class Country {
 
     @Id
@@ -15,7 +15,7 @@ public class Country {
     private String countryName;
 
 
-    @OneToMany (mappedBy = "countryOfOrigin" )
+    @OneToMany (mappedBy = "country" )
     private List<Recipe> recipes;
 
     public Country(Integer id, String countryName, List<Recipe> recipes) {
@@ -27,13 +27,8 @@ public class Country {
     public Country() {
 
     }
-
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getCountryName() {
