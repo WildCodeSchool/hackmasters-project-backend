@@ -6,81 +6,39 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
+@Table(name = "recipes")
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
+    @Column(name = "recipe_name")
     private String recipeName;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, optional = false)
-    @JoinColumn(name = "category_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH, optional = false)
+    @ManyToOne
     @JoinColumn(name = "country_id")
-
-
     private Country country;
 
+    @Column(name = "prep_time")
     private Integer prepTime;
 
+    @Column(name = "cook_time")
     private Integer cookTime;
 
     private BigDecimal price;
 
-    private String imgUrl;
+    @Column(name = "imgurl")
+    private String imageUrl;
 
     private String description;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private List<IngredientRecipe> ingredients;
-
-    public List<IngredientRecipe> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(List<IngredientRecipe> ingredients) {
-        this.ingredients = ingredients;
-    }
-
-    public List<RecipeAllergen> getAllergens() {
-        return allergens;
-    }
-
-    public void setAllergens(List<RecipeAllergen> allergens) {
-        this.allergens = allergens;
-    }
-
-    public List<RecipeDiet> getDiets() {
-        return diets;
-    }
-
-    public void setDiets(List<RecipeDiet> diets) {
-        this.diets = diets;
-    }
-
-    public List<Step> getSteps() {
-        return steps;
-    }
-
-    public void setSteps(List<Step> steps) {
-        this.steps = steps;
-    }
-
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private List<RecipeAllergen> allergens;
-
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private List<RecipeDiet> diets;
-
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private List<Step> steps;
-
-    public Long getId() {
+    public int getId() {
         return id;
     }
-
     public String getRecipeName() {
         return recipeName;
     }
@@ -129,12 +87,12 @@ public class Recipe {
         this.price = price;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getDescription() {
@@ -144,4 +102,6 @@ public class Recipe {
     public void setDescription(String description) {
         this.description = description;
     }
+
+
 }

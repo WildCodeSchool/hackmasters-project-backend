@@ -7,37 +7,31 @@ import jakarta.validation.constraints.Size;
 
 
 @Entity
-public class Ingredient{
+@Table(name = "ingredients")
+public class Ingredient {
 
-@Id
-@GeneratedValue(strategy = GenerationType.AUTO)
- @NotNull
- private Long id;
+ @Id
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
+ private int id;
 
- @Column
- @NotBlank
- @Size(min=5, max = 10, message="The size rules are not met")
- private String name;
+ @Column(name = "ingredient_name")
+ private String ingredientName;
 
- public Ingredient(Long id, String name) {
-  this.id = id;
-  this.name = name;
- }
 
- public Ingredient() {
-
- }
-
- public Long getId() {
+ public int getId() {
   return id;
  }
 
-
- public String getName() {
-  return name;
+ public String getIngredientName() {
+  return ingredientName;
  }
 
- public void setName(String name) {
-  this.name = name;
+ public void setIngredientName(String ingredientName) {
+  this.ingredientName = ingredientName;
  }
+
 }
+
+
+
+

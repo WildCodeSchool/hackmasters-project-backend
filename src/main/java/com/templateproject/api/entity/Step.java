@@ -9,19 +9,14 @@ import java.util.List;
 public class Step {
 
     @Id
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String stepDescription;
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
-
-    @Column(name = "step_description")
-    private String stepDescription;
-    public Step(Integer id, Recipe recipe, String stepDescription) {
-        this.id = id;
-        this.recipe = recipe;
-        this.stepDescription = stepDescription;
-    }
 
     public Step() {
 

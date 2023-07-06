@@ -14,14 +14,9 @@ public class Country {
     @Column(name = "country_name")
     private String countryName;
 
-
-    @OneToMany (mappedBy = "country" )
-    private List<Recipe> recipes;
-
     public Country(Integer id, String countryName, List<Recipe> recipes) {
         this.id = id;
         this.countryName = countryName;
-        this.recipes = recipes;
     }
 
     public Country() {
@@ -39,11 +34,4 @@ public class Country {
         this.countryName = countryName;
     }
 
-    public List<Recipe> getRecipes() {
-        return recipes;
-    }
-
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
-    }
 }

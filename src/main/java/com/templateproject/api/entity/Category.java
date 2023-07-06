@@ -15,9 +15,11 @@ public class Category {
     private String categoryName;
 
 
+
     public Long getId() {
         return id;
     }
+
 
     public String getCategoryName() {
         return categoryName;

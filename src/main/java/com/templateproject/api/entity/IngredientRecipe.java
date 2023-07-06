@@ -3,11 +3,13 @@ package com.templateproject.api.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "recipes_ingredients")
 public class IngredientRecipe {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
@@ -17,19 +19,12 @@ public class IngredientRecipe {
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    public IngredientRecipe(Integer id, Recipe recipe, Ingredient ingredient) {
-        this.id = id;
-        this.recipe = recipe;
-        this.ingredient = ingredient;
-    }
+    private String quantity;
 
-    public IngredientRecipe() {
-
-    }
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
+
 
     public Recipe getRecipe() {
         return recipe;
@@ -45,5 +40,13 @@ public class IngredientRecipe {
 
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 }
