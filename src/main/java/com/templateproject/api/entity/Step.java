@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "steps")
-public class Step {
+public class    Step {
 
     @Id
     private Integer id;
