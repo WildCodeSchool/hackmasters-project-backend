@@ -14,8 +14,6 @@ public class Category {
 
     private String categoryName;
 
-
-
     public Long getId() {
         return id;
     }

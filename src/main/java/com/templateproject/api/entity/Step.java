@@ -7,13 +7,11 @@ import java.util.List;
 @Entity
 @Table(name = "steps")
 public class Step {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String stepDescription;
-
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
@@ -21,7 +19,6 @@ public class Step {
     public Step() {
 
     }
-
     public Integer getId() {
         return id;
     }

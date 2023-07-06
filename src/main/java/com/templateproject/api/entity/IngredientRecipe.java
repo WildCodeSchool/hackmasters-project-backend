@@ -25,7 +25,6 @@ public class IngredientRecipe {
         return id;
     }
 
-
     public Recipe getRecipe() {
         return recipe;
     }

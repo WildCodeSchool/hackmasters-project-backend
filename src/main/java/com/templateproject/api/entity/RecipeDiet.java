@@ -17,7 +17,6 @@ public class RecipeDiet {
     @JoinColumn(name = "diet_id")
     private Diet diet;
 
-    // Getters and setters
 
     public int getId() {
         return id;

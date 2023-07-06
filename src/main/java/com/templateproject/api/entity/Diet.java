@@ -14,8 +14,6 @@ public class Diet {
     @Column(name = "diet_name")
     private String dietName;
 
-    // Getters and setters
-
     public int getId() {
         return id;
     }

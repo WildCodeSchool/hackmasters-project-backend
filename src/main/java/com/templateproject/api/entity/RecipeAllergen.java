@@ -22,7 +22,6 @@ public class RecipeAllergen {
     public int getId() {
         return id;
     }
-
     public Recipe getRecipe() {
         return recipe;
     }
