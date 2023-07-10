@@ -1,5 +1,6 @@
 package com.templateproject.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class Step {
     private String stepDescription;
     @ManyToOne
     @JoinColumn(name = "recipe_id")
+    @JsonIgnore
     private Recipe recipe;
 
     public Step() {
