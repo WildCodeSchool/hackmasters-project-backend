@@ -28,9 +28,7 @@ private Set<Recipe> recipes = new HashSet<>();
     public long getId() {
         return id;
     }
-    public void setId(long id) {
-        this.id = id;
-    }
+
     public String getDietName() {
         return dietName;
     }

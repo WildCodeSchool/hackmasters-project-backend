@@ -39,7 +39,5 @@ public class Allergen {
         return recipes;
     }
 
-    public void setRecipes(Set<Recipe> recipes) {
-        this.recipes = recipes;
-    }
+
 }

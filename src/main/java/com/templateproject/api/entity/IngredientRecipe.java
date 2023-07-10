@@ -38,9 +38,6 @@ public class IngredientRecipe {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public Recipe getRecipe() {
         return recipe;

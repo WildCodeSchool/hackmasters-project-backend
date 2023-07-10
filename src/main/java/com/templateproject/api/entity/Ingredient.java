@@ -26,9 +26,7 @@ public class Ingredient {
  public long getId() {
   return id;
  }
- public void setId(long id) {
-  this.id = id;
- }
+
  public String getIngredientName() {
   return ingredientName;
  }
