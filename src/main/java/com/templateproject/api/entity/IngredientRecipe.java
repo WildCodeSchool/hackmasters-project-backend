@@ -1,29 +1,43 @@
 package com.templateproject.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "recipes_ingredients")
 public class IngredientRecipe {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "id")
+    @JsonIgnore
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
+    @JsonIgnore
     private Recipe recipe;
 
     @ManyToOne
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
+    @Column(name = "quantity")
     private String quantity;
 
-    public int getId() {
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
+
+    public Long getId() {
         return id;
     }
+
 
     public Recipe getRecipe() {
         return recipe;
@@ -39,13 +53,5 @@ public class IngredientRecipe {
 
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
-    }
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
     }
 }
