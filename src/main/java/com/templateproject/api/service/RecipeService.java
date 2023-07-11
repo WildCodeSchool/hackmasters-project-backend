@@ -15,7 +15,15 @@ public class RecipeService {
         this.recipeRepository = recipeRepository;
     }
 
+    public List<Recipe> getAllRecipes() {
+        return recipeRepository.findAll();
+    }
+
     public List<Recipe> getRecipesByAllergens(List<String> allergenNames) {
         return recipeRepository.findByAllergensAllergenNameIn(allergenNames);
+    }
+
+    public List<Recipe> getRecipesByNotAllergens(List<String> allergenNames) {
+        return recipeRepository.findByAllergensAllergenNameNotIn(allergenNames);
     }
 }
