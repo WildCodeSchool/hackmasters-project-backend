@@ -23,7 +23,6 @@ public class RecipeService {
         return recipeRepository.findByAllergensAllergenNameIn(allergenNames);
     }
 
-    public List<Recipe> getRecipesByNotAllergens(List<String> allergenNames) {
-        return recipeRepository.findByAllergensAllergenNameNotIn(allergenNames);
-    }
+
+
 }

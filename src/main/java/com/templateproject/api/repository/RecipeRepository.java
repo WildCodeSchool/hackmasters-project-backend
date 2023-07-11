@@ -12,6 +12,5 @@ import java.util.List;
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     List<Recipe> findByAllergensAllergenNameIn(List<String> allergenNames);
-    List<Recipe> findByAllergensAllergenNameNotIn(List<String> allergenNames);
 
 }
