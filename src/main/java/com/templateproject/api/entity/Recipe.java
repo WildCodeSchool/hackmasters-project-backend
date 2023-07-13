@@ -63,44 +63,15 @@ public class Recipe {
     private Set<Diet> diets = new HashSet<>();
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private Set<IngredientRecipe> IngredientRecipes ;
+    private Set<IngredientRecipe> ingredientRecipes ;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Step> steps = new ArrayList<>();
 
-    public List<Step> getSteps() {
-        return steps;
-    }
-
-    public void setSteps(List<Step> steps) {
-        this.steps = steps;
-    }
-
-    public Set<IngredientRecipe> getIngredientRecipes() {
-        return IngredientRecipes;
-    }
-    public void setIngredientRecipes(Set<IngredientRecipe> ingredientRecipes) {
-        IngredientRecipes = ingredientRecipes;
-    }
-    public Set<Allergen> getAllergens() {
-        return allergens;
-    }
-    public void setAllergens(Set<Allergen> allergens) {
-        this.allergens = allergens;
-    }
-
-    public Set<Diet> getDiets() {
-        return diets;
-    }
-
-    public void setDiets(Set<Diet> diets) {
-        this.diets = diets;
-    }
-
-
     public long getId() {
         return id;
     }
+
     public String getRecipeName() {
         return recipeName;
     }
@@ -165,5 +136,35 @@ public class Recipe {
         this.description = description;
     }
 
+    public Set<Allergen> getAllergens() {
+        return allergens;
+    }
 
+    public void setAllergens(Set<Allergen> allergens) {
+        this.allergens = allergens;
+    }
+
+    public Set<Diet> getDiets() {
+        return diets;
+    }
+
+    public void setDiets(Set<Diet> diets) {
+        this.diets = diets;
+    }
+
+    public Set<IngredientRecipe> getIngredientRecipes() {
+        return ingredientRecipes;
+    }
+
+    public void setIngredientRecipes(Set<IngredientRecipe> ingredientRecipes) {
+        this.ingredientRecipes = ingredientRecipes;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
+    }
 }
