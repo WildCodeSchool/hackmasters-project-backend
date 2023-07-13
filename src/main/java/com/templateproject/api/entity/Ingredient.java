@@ -1,39 +1,31 @@
-package com.templateproject.api.entity;
+    package com.templateproject.api.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+    import jakarta.persistence.*;
 
 
-@Entity
-@Table(name = "ingredients")
-public class Ingredient {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private long id;
+    @Entity
+    @Table(name = "ingredients")
+    public class Ingredient {
 
-  @Column(name = "ingredient_name")
-  private String ingredientName;
- public long getId() {
-  return id;
- }
+      @Id
+      @GeneratedValue(strategy = GenerationType.IDENTITY)
+      @Column(name = "id")
+      private long id;
 
- public String getIngredientName() {
-  return ingredientName;
- }
- public void setIngredientName(String ingredientName) {
-  this.ingredientName = ingredientName;
- }
-}
+      @Column(name = "ingredient_name")
+      private String ingredientName;
+     public long getId() {
+      return id;
+     }
+
+     public String getIngredientName() {
+      return ingredientName;
+     }
+     public void setIngredientName(String ingredientName) {
+      this.ingredientName = ingredientName;
+     }
+    }
 
 
 

@@ -1,10 +1,10 @@
 package com.templateproject.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -13,6 +13,7 @@ import java.util.Set;
 public class Allergen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id")
     private int id;
     @Column(name = "allergen_name")
     private String allergenName;
@@ -23,6 +24,7 @@ public class Allergen {
             },
             mappedBy = "allergens")
     @JsonIgnore
+    @JsonIgnoreProperties("allergens")
     private Set<Recipe> recipes = new HashSet<>();
 
     public int getId() {

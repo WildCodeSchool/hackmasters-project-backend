@@ -9,6 +9,7 @@ import jakarta.persistence.*;
     public class RecipeDiet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id")
     private long id;
     @ManyToOne
     @JoinColumn(name = "diet_id")
@@ -16,28 +17,18 @@ import jakarta.persistence.*;
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     @JsonIgnore
-    private Recipe recipes;
+    private Recipe recipe;
 
+    public RecipeDiet() {
+
+    }
 
     public long getId() {
         return id;
     }
 
-
-    public Recipe getRecipe() {
-        return recipes;
-    }
-
-    public Recipe getRecipes() {
-        return recipes;
-    }
-
-    public void setRecipes(Recipe recipes) {
-        this.recipes = recipes;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipes = recipe;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Diet getDiet() {
@@ -48,6 +39,17 @@ import jakarta.persistence.*;
         this.diet = diet;
     }
 
+    public Recipe getRecipe() {
+        return recipe;
+    }
 
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
 
+    public RecipeDiet(long id, Diet diet, Recipe recipe) {
+        this.id = id;
+        this.diet = diet;
+        this.recipe = recipe;
+    }
 }

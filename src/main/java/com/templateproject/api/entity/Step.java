@@ -3,15 +3,16 @@ package com.templateproject.api.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.util.List;
 
 @Entity
 @Table(name = "steps")
 public class Step {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id")
     private int id;
 
+    @Column(name = "step_description")
     private String stepDescription;
     @ManyToOne
     @JoinColumn(name = "recipe_id")

@@ -1,11 +1,10 @@
 package com.templateproject.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +15,7 @@ import java.util.Set;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id")
     private long id;
 
     @Column(name = "recipe_name")
@@ -35,38 +35,50 @@ public class Recipe {
     @Column(name = "cook_time")
     private Integer cookTime;
 
+    @Column (name = "price")
     private BigDecimal price;
 
     @Column(name = "imgurl")
     private String imageUrl;
 
+    @Column(name = "description")
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
             })
     @JoinTable(name = "recipe_allergens",
-            joinColumns = { @JoinColumn(name = "recipe_id") },
-            inverseJoinColumns = { @JoinColumn(name = "allergen_id") })
+            joinColumns = {@JoinColumn(name = "recipe_id")},
+            inverseJoinColumns = {@JoinColumn(name = "allergen_id")})
     private Set<Allergen> allergens = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
             })
     @JoinTable(name = "recipe_diets",
-            joinColumns = { @JoinColumn(name = "recipe_id") },
-            inverseJoinColumns = { @JoinColumn(name = "diet_id") })
+            joinColumns = {@JoinColumn(name = "recipe_id")},
+            inverseJoinColumns = {@JoinColumn(name = "diet_id")})
+    @JsonIgnoreProperties("recipes")
     private Set<Diet> diets = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private Set<IngredientRecipe> IngredientRecipes ;
+    private Set<IngredientRecipe> ingredientRecipes;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Step> steps = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<Step> steps;
+
+    public Recipe() {
+
+    }
+
+    public Recipe(Recipe recipesEntity) {
+    }
 
     public List<Step> getSteps() {
         return steps;
@@ -77,14 +89,13 @@ public class Recipe {
     }
 
     public Set<IngredientRecipe> getIngredientRecipes() {
-        return IngredientRecipes;
+        return ingredientRecipes;
     }
-    public void setIngredientRecipes(Set<IngredientRecipe> ingredientRecipes) {
-        IngredientRecipes = ingredientRecipes;
-    }
+
     public Set<Allergen> getAllergens() {
         return allergens;
     }
+
     public void setAllergens(Set<Allergen> allergens) {
         this.allergens = allergens;
     }
@@ -101,6 +112,7 @@ public class Recipe {
     public long getId() {
         return id;
     }
+
     public String getRecipeName() {
         return recipeName;
     }
@@ -165,5 +177,19 @@ public class Recipe {
         this.description = description;
     }
 
-
+    public Recipe(long id, String recipeName, Category category, Country country, Integer prepTime, Integer cookTime, BigDecimal price, String imageUrl, String description, Set<Allergen> allergens, Set<Diet> diets, Set<IngredientRecipe> ingredientRecipes, List<Step> steps) {
+        this.id = id;
+        this.recipeName = recipeName;
+        this.category = category;
+        this.country = country;
+        this.prepTime = prepTime;
+        this.cookTime = cookTime;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.allergens = allergens;
+        this.diets = diets;
+        this.ingredientRecipes = ingredientRecipes;
+        this.steps = steps;
+    }
 }

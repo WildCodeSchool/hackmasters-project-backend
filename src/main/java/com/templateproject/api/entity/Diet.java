@@ -1,10 +1,9 @@
 package com.templateproject.api.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,6 +11,7 @@ import java.util.Set;
 public class Diet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column (name = "id")
     private long id;
 
     @Column(name = "diet_name")
@@ -23,8 +23,7 @@ public class Diet {
                     CascadeType.MERGE
             },
             mappedBy = "diets")
-@JsonIgnore
-private Set<Recipe> recipes = new HashSet<>();
+@JsonIgnoreProperties("diets")private Set<Recipe> recipes = new HashSet<>();
     public long getId() {
         return id;
     }

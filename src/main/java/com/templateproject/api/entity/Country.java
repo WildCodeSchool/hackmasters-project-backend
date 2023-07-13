@@ -8,6 +8,7 @@ import java.util.List;
 @Table(name = "country")
 public class Country {
     @Id
+    @Column (name = "id")
     private Integer id;
     @Column(name = "country_name")
     private String countryName;
