@@ -71,8 +71,10 @@ public class RecipeController {
         List<Recipe> recipes = recipeRepository.findByAllergensAllergenNameInIgnoreCase(allergenNames);
         return ResponseEntity.ok(recipes);
     }
+
     @GetMapping("/search")
     public ResponseEntity<List<Recipe>> searchRecipesByCriteria(
+            @RequestParam(required = false) String recipeName,
             @RequestParam(required = false) List<String> countryNames,
             @RequestParam(required = false) List<String> categoryNames,
             @RequestParam(required = false) List<String> ingredientNames,
@@ -81,7 +83,9 @@ public class RecipeController {
     ) {
         List<Recipe> recipes;
 
-        if (countryNames != null && !countryNames.isEmpty()) {
+        if (countryNames != null && !countryNames.isEmpty() && categoryNames != null && !categoryNames.isEmpty()) {
+            recipes = recipeRepository.findByCountryCountryNameInIgnoreCaseAndCategoryCategoryNameInIgnoreCase(countryNames, categoryNames);
+        } else if (countryNames != null && !countryNames.isEmpty()) {
             recipes = recipeRepository.findByCountryCountryNameInIgnoreCase(countryNames);
         } else if (categoryNames != null && !categoryNames.isEmpty()) {
             recipes = recipeRepository.findByCategoryCategoryNameInIgnoreCase(categoryNames);
@@ -94,11 +98,38 @@ public class RecipeController {
             recipes = ingredientRecipes.stream().map(IngredientRecipe::getRecipe).collect(Collectors.toList());
         } else if (dietNames != null && !dietNames.isEmpty()) {
             recipes = recipeRepository.findByDietsDietNameInIgnoreCase(dietNames);
-        } else if (allergenNames != null && !allergenNames.isEmpty()) {
-            recipes = recipeRepository.findByAllergensAllergenNameInIgnoreCase(allergenNames);
         } else {
-            recipes = new ArrayList<>(); // Return empty list if no criteria provided
+            recipes = recipeRepository.findAll();
         }
+
+
+        if (allergenNames != null && !allergenNames.isEmpty()) {
+            List<Recipe> recipesWithAllergens = recipeRepository.findByAllergensAllergenNameInIgnoreCase(allergenNames);
+            List<Long> recipeIdsWithAllergens = recipesWithAllergens.stream().map(Recipe::getId).collect(Collectors.toList());
+            recipes = recipes.stream()
+                    .filter(recipe -> !recipeIdsWithAllergens.contains(recipe.getId()))
+                    .collect(Collectors.toList());
+        }
+        if (dietNames != null && !dietNames.isEmpty()) {
+            recipes = recipes.stream()
+                    .filter(recipe -> recipe.getDiets().stream()
+                            .anyMatch(diet -> dietNames.contains(diet.getDietName().toLowerCase())))
+                    .collect(Collectors.toList());
+        }
+
+        if (recipeName != null && !recipeName.isEmpty()) {
+            recipes = recipes.stream()
+                    .filter(recipe -> recipe.getRecipeName().toLowerCase().contains(recipeName.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        if (ingredientNames != null && !ingredientNames.isEmpty()) {
+            recipes = recipes.stream()
+                    .filter(recipe -> recipe.getIngredientRecipes().stream()
+                            .anyMatch(ingredientRecipe -> ingredientNames.contains(ingredientRecipe.getIngredient().getIngredientName().toLowerCase())))
+                    .collect(Collectors.toList());
+        }
+
+
 
         return ResponseEntity.ok(recipes);
     }
