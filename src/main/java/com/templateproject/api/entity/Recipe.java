@@ -42,7 +42,7 @@ public class Recipe {
 
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
@@ -52,7 +52,7 @@ public class Recipe {
             inverseJoinColumns = { @JoinColumn(name = "allergen_id") })
     private Set<Allergen> allergens = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE

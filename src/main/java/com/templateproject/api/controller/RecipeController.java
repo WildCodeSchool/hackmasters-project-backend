@@ -20,14 +20,15 @@ public class RecipeController {
     IngredientRecipeRepository IngredientRecipeRepository;
 
     // Get all recipes
+
     @GetMapping
     public List<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
     }
 
     @GetMapping("/{recipeName}")
-    public ResponseEntity<List<Recipe>> searchRecipesByExactName(@PathVariable("recipeName") String recipeName) {
-        List<Recipe> recipes = recipeRepository.findByRecipeNameIgnoreCase(recipeName);
+    public ResponseEntity<Recipe> searchRecipesByExactName(@PathVariable("recipeName") String recipeName) {
+        Recipe recipes = recipeRepository.findByRecipeNameIgnoreCase(recipeName);
         return ResponseEntity.ok(recipes);
     }
 
