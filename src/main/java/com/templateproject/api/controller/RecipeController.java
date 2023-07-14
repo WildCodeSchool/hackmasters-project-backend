@@ -32,7 +32,7 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping ("/name")
+    @GetMapping("/name")
     public ResponseEntity<List<Recipe>> searchRecipesByPartialName(@RequestParam("recipeName") String recipeName) {
         List<Recipe> recipes = recipeRepository.findByRecipeNameContainingIgnoreCase(recipeName);
         return ResponseEntity.ok(recipes);
@@ -44,6 +44,7 @@ public class RecipeController {
         List<Recipe> recipes = recipeRepository.findByCountryCountryNameInIgnoreCase(countryNames);
         return ResponseEntity.ok(recipes);
     }
+
     @GetMapping("/category")
     public ResponseEntity<List<Recipe>> searchRecipesByCategoryNames(@RequestParam List<String> categoryNames) {
         List<Recipe> recipes = recipeRepository.findByCategoryCategoryNameInIgnoreCase(categoryNames);
@@ -60,6 +61,7 @@ public class RecipeController {
         List<Recipe> recipes = ingredientRecipes.stream().map(IngredientRecipe::getRecipe).collect(Collectors.toList());
         return ResponseEntity.ok(recipes);
     }
+
     @GetMapping("/Diet")
     public ResponseEntity<List<Recipe>> searchRecipesByDietNames(@RequestParam List<String> dietNames) {
         List<Recipe> recipes = recipeRepository.findByDietsDietNameInIgnoreCase(dietNames);
@@ -74,7 +76,7 @@ public class RecipeController {
 
     @GetMapping("/search")
     public ResponseEntity<List<Recipe>> searchRecipesByCriteria(
-            @RequestParam(required = false) String recipeName,
+            @RequestParam(required = false) String query,
             @RequestParam(required = false) List<String> countryNames,
             @RequestParam(required = false) List<String> categoryNames,
             @RequestParam(required = false) List<String> ingredientNames,
@@ -102,7 +104,6 @@ public class RecipeController {
             recipes = recipeRepository.findAll();
         }
 
-
         if (allergenNames != null && !allergenNames.isEmpty()) {
             List<Recipe> recipesWithAllergens = recipeRepository.findByAllergensAllergenNameInIgnoreCase(allergenNames);
             List<Long> recipeIdsWithAllergens = recipesWithAllergens.stream().map(Recipe::getId).collect(Collectors.toList());
@@ -117,19 +118,14 @@ public class RecipeController {
                     .collect(Collectors.toList());
         }
 
-        if (recipeName != null && !recipeName.isEmpty()) {
+        if (query != null && !query.isEmpty()) {
+            String lowerCaseQuery = query.toLowerCase();
             recipes = recipes.stream()
-                    .filter(recipe -> recipe.getRecipeName().toLowerCase().contains(recipeName.toLowerCase()))
+                    .filter(recipe -> recipe.getRecipeName().toLowerCase().contains(lowerCaseQuery) ||
+                            recipe.getIngredientRecipes().stream()
+                                    .anyMatch(ingredientRecipe -> ingredientRecipe.getIngredient().getIngredientName().toLowerCase().contains(lowerCaseQuery)))
                     .collect(Collectors.toList());
         }
-        if (ingredientNames != null && !ingredientNames.isEmpty()) {
-            recipes = recipes.stream()
-                    .filter(recipe -> recipe.getIngredientRecipes().stream()
-                            .anyMatch(ingredientRecipe -> ingredientNames.contains(ingredientRecipe.getIngredient().getIngredientName().toLowerCase())))
-                    .collect(Collectors.toList());
-        }
-
-
 
         return ResponseEntity.ok(recipes);
     }
