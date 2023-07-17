@@ -14,11 +14,13 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/recipes")
 public class RecipeController {
-    @Autowired
-    RecipeRepository recipeRepository;
-    @Autowired
-    IngredientRecipeRepository IngredientRecipeRepository;
+final private RecipeRepository recipeRepository;
+final private IngredientRecipeRepository IngredientRecipeRepository;
 
+public RecipeController(RecipeRepository recipeRepository, IngredientRecipeRepository IngredientRecipeRepository) {
+        this.recipeRepository = recipeRepository;
+        this.IngredientRecipeRepository = IngredientRecipeRepository;
+    }
     // Get all recipes
 
     @GetMapping
@@ -128,6 +130,12 @@ public class RecipeController {
         }
 
         return ResponseEntity.ok(recipes);
+    }
+
+    @PostMapping()
+    public ResponseEntity<Recipe> addRecipe(@RequestBody Recipe recipe) {
+        Recipe newRecipe = recipeRepository.save(recipe);
+        return ResponseEntity.ok(newRecipe);
     }
 }
 
