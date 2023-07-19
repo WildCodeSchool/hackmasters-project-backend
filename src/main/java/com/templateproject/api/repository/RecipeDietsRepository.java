@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RecipeDietsRepository extends JpaRepository<RecipeDiet, Long>{
+
 }
