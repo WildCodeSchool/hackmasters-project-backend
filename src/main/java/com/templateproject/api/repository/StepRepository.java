@@ -9,7 +9,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StepRepository extends JpaRepository<Step, Long> {
-
-
+public interface StepRepository extends JpaRepository<Step, Integer> {
 }

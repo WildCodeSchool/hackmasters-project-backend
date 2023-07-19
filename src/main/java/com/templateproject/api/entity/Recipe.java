@@ -22,6 +22,17 @@ public class Recipe {
     @Column(name = "recipe_name")
     private String recipeName;
 
+    public String getRecipeSlug() {
+        return recipeSlug;
+    }
+
+    public void setRecipeSlug(String recipeSlug) {
+        this.recipeSlug = recipeSlug;
+    }
+
+    @Column(name = "recipe_slug")
+    private String recipeSlug;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -40,6 +51,7 @@ public class Recipe {
 
     @Column(name = "imgurl")
     private String imageUrl;
+
 
     private String description;
 
