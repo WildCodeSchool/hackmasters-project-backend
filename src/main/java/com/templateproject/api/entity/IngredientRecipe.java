@@ -3,6 +3,8 @@ package com.templateproject.api.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.templateproject.api.views.Views;
 import jakarta.persistence.*;
 
 @Entity
@@ -22,9 +24,11 @@ public class IngredientRecipe {
 
     @ManyToOne
     @JoinColumn(name = "ingredient_id")
+    @JsonView(Views.UserDetail.class)
     private Ingredient ingredient;
 
     @Column(name = "quantity")
+    @JsonView(Views.UserDetail.class)
     private String quantity;
 
     public String getQuantity() {

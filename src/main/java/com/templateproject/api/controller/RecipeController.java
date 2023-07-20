@@ -1,12 +1,14 @@
 package com.templateproject.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.templateproject.api.entity.FavoriteRecipes;
 import com.templateproject.api.entity.IngredientRecipe;
 import com.templateproject.api.entity.Recipe;
 
+import com.templateproject.api.entity.User;
 import com.templateproject.api.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.templateproject.api.views.Views;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -23,32 +25,41 @@ final private RecipeDietsRepository recipesDietsRepository;
 
 final private StepRepository stepRepository;
 
+final private FavoriteRecipeRepository favoriteRecipeRepository;
+
+final private UserRepository userRepository;
+
 public RecipeController(RecipeRepository recipeRepository,
                         IngredientRecipeRepository IngredientRecipeRepository,
                         RecipesAllergensRepository recipesAllergensRepository,
                         RecipeDietsRepository recipesDietsRepository,
-                        StepRepository stepRepository)
+                        StepRepository stepRepository, FavoriteRecipeRepository favoriteRecipeRepository, UserRepository userRepository)
     {
         this.recipeRepository = recipeRepository;
         this.IngredientRecipeRepository = IngredientRecipeRepository;
         this.recipesAllergensRepository = recipesAllergensRepository;
         this.recipesDietsRepository = recipesDietsRepository;
         this.stepRepository = stepRepository;
+        this.favoriteRecipeRepository = favoriteRecipeRepository;
+        this.userRepository = userRepository;
     }
 
 
     @GetMapping
+    @JsonView(Views.UserDetail.class)
     public List<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
     }
 
     @GetMapping("/{recipeSlug}")
+    @JsonView(Views.UserDetail.class)
     public ResponseEntity<Recipe> searchRecipesByExactName(@PathVariable("recipeSlug") String recipeName) {
         Recipe recipes = recipeRepository.findByRecipeSlugIgnoreCase(recipeName);
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/Slug")
+    @JsonView(Views.UserDetail.class)
     public ResponseEntity<List<Recipe>> searchRecipesByPartialName(@RequestParam("recipeSlug") String recipeName) {
         List<Recipe> recipes = recipeRepository.findByRecipeSlugContainingIgnoreCase(recipeName);
         return ResponseEntity.ok(recipes);
@@ -56,18 +67,21 @@ public RecipeController(RecipeRepository recipeRepository,
 
 
     @GetMapping("/country")
+    @JsonView(Views.UserDetail.class)
     public ResponseEntity<List<Recipe>> searchRecipesByCountryNames(@RequestParam List<String> countryNames) {
         List<Recipe> recipes = recipeRepository.findByCountryCountryNameInIgnoreCase(countryNames);
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/category")
+    @JsonView(Views.UserDetail.class)
     public ResponseEntity<List<Recipe>> searchRecipesByCategoryNames(@RequestParam List<String> categoryNames) {
         List<Recipe> recipes = recipeRepository.findByCategoryCategoryNameInIgnoreCase(categoryNames);
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/ingredients")
+    @JsonView(Views.UserDetail.class)
     public ResponseEntity<List<Recipe>> searchRecipesByIngredientNames(@RequestParam List<String> ingredientNames) {
         List<IngredientRecipe> ingredientRecipes = new ArrayList<>();
         for (String ingredientName : ingredientNames) {
@@ -79,25 +93,29 @@ public RecipeController(RecipeRepository recipeRepository,
     }
 
     @GetMapping("/Diet")
+    @JsonView(Views.UserDetail.class)
     public ResponseEntity<List<Recipe>> searchRecipesByDietNames(@RequestParam List<String> dietNames) {
         List<Recipe> recipes = recipeRepository.findByDietsDietNameInIgnoreCase(dietNames);
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/Allergen")
+    @JsonView(Views.UserDetail.class)
     public ResponseEntity<List<Recipe>> searchRecipesByAllergenNames(@RequestParam List<String> allergenNames) {
         List<Recipe> recipes = recipeRepository.findByAllergensAllergenNameInIgnoreCase(allergenNames);
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/search")
+    @JsonView(Views.UserDetail.class)
     public ResponseEntity<List<Recipe>> searchRecipesByCriteria(
             @RequestParam(required = false) String query,
             @RequestParam(required = false) List<String> countryNames,
             @RequestParam(required = false) List<String> categoryNames,
             @RequestParam(required = false) List<String> ingredientNames,
             @RequestParam(required = false) List<String> dietNames,
-            @RequestParam(required = false) List<String> allergenNames
+            @RequestParam(required = false) List<String> allergenNames,
+            @RequestParam(required = false) Long userId
     ) {
         List<Recipe> recipes;
 
@@ -143,8 +161,21 @@ public RecipeController(RecipeRepository recipeRepository,
                     .collect(Collectors.toList());
         }
 
+
+        if (userId != null) {
+            User user = userRepository.findById(userId).orElse(null);
+            if (user != null) {
+                List<FavoriteRecipes> userFavorites = favoriteRecipeRepository.findByUser(user);
+                List<Recipe> favoriteRecipes = userFavorites.stream()
+                        .map(FavoriteRecipes::getRecipe)
+                        .collect(Collectors.toList());
+                recipes.retainAll(favoriteRecipes);
+            }
+        }
+
         return ResponseEntity.ok(recipes);
     }
+
 
 
     @PostMapping()

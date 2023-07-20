@@ -1,8 +1,10 @@
 package com.templateproject.api.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.templateproject.api.entity.User;
 import com.templateproject.api.service.UserService;
+import com.templateproject.api.views.Views;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

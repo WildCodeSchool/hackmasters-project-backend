@@ -2,6 +2,8 @@ package com.templateproject.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.templateproject.api.views.Views;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -13,9 +15,11 @@ import java.util.Set;
 public class Diet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.UserDetail.class)
     private long id;
 
     @Column(name = "diet_name")
+    @JsonView(Views.UserDetail.class)
     private String dietName;
 
     @ManyToMany(fetch = FetchType.LAZY,

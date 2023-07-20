@@ -56,11 +56,11 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/auth/**", "/swagger-ui/**", "/v3/**").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/recipes/**").permitAll();
-                    auth.requestMatchers(HttpMethod.POST, "/auth/**").authenticated();
-                    auth.requestMatchers( "/users/**").hasAuthority("SCOPE_ROLE_ADMIN");
-                    auth.anyRequest().authenticated();
+                    //auth.requestMatchers("/auth/**", "/swagger-ui/**", "/v3/**").permitAll();
+                    //auth.requestMatchers(HttpMethod.GET, "/recipes/**").permitAll();
+                    //auth.requestMatchers(HttpMethod.POST, "/auth/**").authenticated();
+                    //auth.requestMatchers( "/users/**").hasAuthority("SCOPE_ROLE_ADMIN");
+                    auth.anyRequest().permitAll();
                 })
 
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))

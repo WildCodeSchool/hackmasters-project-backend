@@ -1,6 +1,8 @@
 package com.templateproject.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.templateproject.api.views.Views;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,9 +21,11 @@ public class    Ingredient {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
+  @JsonView(Views.UserDetail.class)
   private int id;
 
   @Column(name = "ingredient_name")
+  @JsonView(Views.UserDetail.class)
   private String ingredientName;
  public int getId() {
   return id;

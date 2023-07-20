@@ -3,6 +3,9 @@ package com.templateproject.api.entity;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonView;
+import com.templateproject.api.views.Views;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,6 +29,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
+    @JsonView(Views.UserDetail.class)
     private Long id;
 
     @Column (name = "username")
@@ -40,6 +44,7 @@ public class User implements UserDetails {
 
 
     @Column( name = "firstname")
+    @JsonView(Views.UserDetail.class)
     private String firstname;
 
 
