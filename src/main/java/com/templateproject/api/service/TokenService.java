@@ -1,124 +1,58 @@
-//package com.templateproject.api.service;
-//
-//import java.time.Instant;
-//import java.time.temporal.ChronoUnit;
-//import java.util.Date;
-//import java.util.stream.Collectors;
-//
-//import com.nimbusds.jose.*;
-//import com.nimbusds.jose.crypto.MACSigner;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.oauth2.jwt.Jwt;
-//import org.springframework.stereotype.Service;
-//
-//@Service
-//public class TokenService {
-//
-//    private final String jwtSecret; // Your secret key (Base64-encoded string)
-//
-//    @Autowired
-//    public TokenService(String jwtSecret) {
-//        this.jwtSecret = jwtSecret;
-//    }
-//    public String generateToken(Authentication auth) {
-//        try {
-//            Instant now = Instant.now();
-//            Instant expiration = now.plus(30, ChronoUnit.DAYS);
-//
-//            String scope = auth.getAuthorities().stream()
-//                    .map(GrantedAuthority::getAuthority)
-//                    .collect(Collectors.joining(" "));
-//
-//            Jwt jwt = Jwt.withTokenValue("dummy") // Set any dummy value
-//                    .header("alg", "HS256") // Algorithm used for signing
-//                    .claim("iss", "self") // Issuer
-//                    .claim("sub", auth.getName()) // Subject (username)
-//                    .claim("scope", scope) // Scopes/Authorities
-//                    .issuedAt(Date.from(now).toInstant()) // Convert Instant to Date
-//                    .expiresAt(Date.from(expiration).toInstant()) // Convert Instant to Date
-//                    .build();
-//
-//            JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).build();
-//            JWSObject jwsObject = new JWSObject(jwsHeader, new Payload(jwt.getClaims()));
-//            JWSSigner signer = new MACSigner(jwtSecret.getBytes());
-//            jwsObject.sign(signer);
-//
-//            return jwsObject.serialize();
-//        } catch (JOSEException e) {
-//            // Gérer l'exception ici (par exemple, journaliser l'erreur, renvoyer une valeur par défaut, etc.)
-//            e.printStackTrace(); // Vous pouvez remplacer ceci par une gestion appropriée de l'exception
-//            return null; // Vous pouvez définir une valeur par défaut ou un autre comportement en cas d'erreur
-//        }
-//    }
-//
-//    // Add method to verify token if needed
-//}
-
 package com.templateproject.api.service;
 
-import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.MACSigner;
-import com.nimbusds.jose.shaded.gson.Gson;
-import com.templateproject.api.utils.GsonFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.stereotype.Service;
-import org.springframework.security.core.GrantedAuthority;
-
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
+import java.util.Base64;
 import java.util.stream.Collectors;
+import com.templateproject.api.entity.User;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.stereotype.Service;
 
-// Autres imports...
 
 @Service
 public class TokenService {
 
-    // Votre code existant...
+    private final JwtEncoder jwtEncoder;
+    private final byte[] jwtSecret;
 
-    private final String jwtSecret;
-    private final Gson gson; // Ajoutez une instance de Gson avec l'adaptateur
-
-    @Autowired
-    public TokenService(String jwtSecret) {
-        this.jwtSecret = jwtSecret;
-        this.gson = GsonFactory.createGsonWithInstantAdapter(); // Initialisez Gson avec l'adaptateur
+    public TokenService(JwtEncoder jwtEncoder) {
+        this.jwtEncoder = jwtEncoder;
+        this.jwtSecret = Base64.getDecoder().decode("VzyVUCJujcNQi0iK8uSEVJc1MdjDkBx/E5ru+I0KoD8=");
     }
-    Instant now = Instant.now();
-
+    //Use Authentication class from security ???
     public String generateToken(Authentication auth) {
-        try {
-            Instant expiration = now.plus(30, ChronoUnit.DAYS);
+        // We want to create a JWT token
+        // Choose and set the algorithm used to sign the token (here HS256) and build the header
+        JwsHeader jwsHeader = JwsHeader.with(() -> "HS256").build();
 
-            String scope = auth.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.joining(" "));
+        // Retrieve the timestamp of the moment the token is created
+        Instant now = Instant.now();
 
-            Jwt jwt = Jwt.withTokenValue("dummy")
-                    .header("alg", "HS256")
-                    .claim("iss", "self")
-                    .claim("sub", auth.getName())
-                    .claim("scope", scope)
-                    .issuedAt(Date.from(now).toInstant())
-                    .expiresAt(Date.from(expiration).toInstant())
-                    .build();
+        // We want to set the expiration date of the token to 30 days after its creation
+        Instant expiration = now.plusSeconds(30 * 24 * 60 * 60);
 
+        // We want to set the scope of the token to the authorities of the user
+        String scope = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "));
 
-            JWSHeader jwsHeader = new JWSHeader.Builder(JWSAlgorithm.HS256).build();
-            JWSObject jwsObject = new JWSObject(jwsHeader, new Payload(jwt.getClaims()));
-            JWSSigner signer = new MACSigner(jwtSecret.getBytes());
-            jwsObject.sign(signer);
+        // We want to set the claims of the token
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .issuer("self")
+                .issuedAt(now)
+                .expiresAt(expiration)
+                .subject(auth.getName())
+                .claim("scope", scope)
+                .claim("username", ((User) auth.getPrincipal()).getUserStringName())
+                .build();
 
-            return jwsObject.serialize();
-        } catch (JOSEException e) {
-            // Gérer l'exception ici si nécessaire
-            e.printStackTrace();
-            return null;
-        }
+        // We want to encode the token with the header and the payload
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
+
     }
+
 }

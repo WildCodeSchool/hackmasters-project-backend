@@ -43,7 +43,7 @@ public class UserController {
         return userService.register(user.getPassword(), user.getEmail(), user.getFirstname());
     }
 
-    @GetMapping("/auth/login")
+    @PostMapping("/auth/login")
     public String login(@RequestBody User user) {
         System.out.println(user.getEmail());
         return userService.login(user.getEmail(), user.getPassword());
