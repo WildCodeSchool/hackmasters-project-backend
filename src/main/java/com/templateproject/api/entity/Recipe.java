@@ -2,6 +2,7 @@ package com.templateproject.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -62,10 +63,15 @@ public class Recipe {
             inverseJoinColumns = { @JoinColumn(name = "diet_id") })
     private Set<Diet> diets = new HashSet<>();
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private Set<IngredientRecipe> ingredientRecipes ;
+//    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+//    private Set<IngredientRecipe> ingredientRecipes ;
+@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+private Set<IngredientRecipe> ingredientRecipes;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<Step> steps = new ArrayList<>();
 
     public long getId() {

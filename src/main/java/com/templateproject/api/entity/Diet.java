@@ -1,6 +1,7 @@
 package com.templateproject.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -17,14 +18,15 @@ public class Diet {
     @Column(name = "diet_name")
     private String dietName;
 
-@ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
             },
             mappedBy = "diets")
-@JsonIgnore
-private Set<Recipe> recipes = new HashSet<>();
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
+    private Set<Recipe> recipes = new HashSet<>();
     public long getId() {
         return id;
     }

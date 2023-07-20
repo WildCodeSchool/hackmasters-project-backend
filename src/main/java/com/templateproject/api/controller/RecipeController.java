@@ -4,7 +4,6 @@ import com.templateproject.api.entity.IngredientRecipe;
 import com.templateproject.api.entity.Recipe;
 import com.templateproject.api.repository.RecipeRepository;
 import com.templateproject.api.repository.IngredientRecipeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +13,14 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/recipes")
 public class RecipeController {
-    @Autowired
-    RecipeRepository recipeRepository;
-    @Autowired
-    IngredientRecipeRepository IngredientRecipeRepository;
+
+    final private RecipeRepository recipeRepository;
+    final private IngredientRecipeRepository IngredientRecipeRepository;
+
+    public RecipeController(RecipeRepository recipeRepository, IngredientRecipeRepository IngredientRecipeRepository) {
+        this.recipeRepository = recipeRepository;
+        this.IngredientRecipeRepository = IngredientRecipeRepository;
+    }
 
     // Get all recipes
 
@@ -129,5 +132,8 @@ public class RecipeController {
 
         return ResponseEntity.ok(recipes);
     }
+
+
+
 }
 
