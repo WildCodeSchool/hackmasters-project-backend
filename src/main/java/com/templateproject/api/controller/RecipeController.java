@@ -2,6 +2,7 @@ package com.templateproject.api.controller;
 
 import com.templateproject.api.entity.IngredientRecipe;
 import com.templateproject.api.entity.Recipe;
+
 import com.templateproject.api.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/recipes")
 public class RecipeController {
+
 final private RecipeRepository recipeRepository;
 final private IngredientRecipeRepository IngredientRecipeRepository;
 final private RecipesAllergensRepository recipesAllergensRepository;
@@ -33,7 +35,7 @@ public RecipeController(RecipeRepository recipeRepository,
         this.recipesDietsRepository = recipesDietsRepository;
         this.stepRepository = stepRepository;
     }
-    // Get all recipes
+
 
     @GetMapping
     public List<Recipe> getAllRecipes() {
@@ -144,6 +146,7 @@ public RecipeController(RecipeRepository recipeRepository,
         return ResponseEntity.ok(recipes);
     }
 
+
     @PostMapping()
     public ResponseEntity<Recipe> addRecipe(@RequestBody Recipe recipe) {
         Recipe newRecipe = recipeRepository.save(recipe);
@@ -154,6 +157,7 @@ public RecipeController(RecipeRepository recipeRepository,
     public void deleteRecipeById(@PathVariable("recipeId") long recipeId) {
         recipeRepository.deleteById(recipeId);
     }
+
 }
 
 

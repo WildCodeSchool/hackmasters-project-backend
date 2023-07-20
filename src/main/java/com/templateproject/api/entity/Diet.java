@@ -18,7 +18,7 @@ public class Diet {
     @Column(name = "diet_name")
     private String dietName;
 
-@ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.LAZY,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
@@ -26,6 +26,7 @@ public class Diet {
             mappedBy = "diets")
 @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 private Set<Recipe> recipes = new HashSet<>();
+
     public long getId() {
         return id;
     }

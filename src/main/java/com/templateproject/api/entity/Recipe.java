@@ -77,12 +77,14 @@ public class Recipe {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Diet> diets = new HashSet<>();
 
+
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<IngredientRecipe> ingredientRecipes ;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+
     private List<Step> steps = new ArrayList<>();
 
     public long getId() {

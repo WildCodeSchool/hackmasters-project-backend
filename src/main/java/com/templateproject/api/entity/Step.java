@@ -17,6 +17,7 @@ public class Step {
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
     private Recipe recipe;
 
     public Step() {
