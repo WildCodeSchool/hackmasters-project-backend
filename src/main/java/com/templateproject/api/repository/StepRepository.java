@@ -1,10 +1,13 @@
 package com.templateproject.api.repository;
 
-import com.templateproject.api.entity.Diet;
+
+
+import com.templateproject.api.entity.Step;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface DietRepository extends JpaRepository<Diet, Long> {
+import java.util.List;
 
+@Repository
+public interface StepRepository extends JpaRepository<Step, Integer> {
 }

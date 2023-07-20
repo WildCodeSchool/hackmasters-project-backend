@@ -2,6 +2,7 @@ package com.templateproject.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -20,6 +21,17 @@ public class Recipe {
 
     @Column(name = "recipe_name")
     private String recipeName;
+
+    public String getRecipeSlug() {
+        return recipeSlug;
+    }
+
+    public void setRecipeSlug(String recipeSlug) {
+        this.recipeSlug = recipeSlug;
+    }
+
+    @Column(name = "recipe_slug")
+    private String recipeSlug;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -40,9 +52,10 @@ public class Recipe {
     @Column(name = "imgurl")
     private String imageUrl;
 
+
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
@@ -50,9 +63,10 @@ public class Recipe {
     @JoinTable(name = "recipe_allergens",
             joinColumns = { @JoinColumn(name = "recipe_id") },
             inverseJoinColumns = { @JoinColumn(name = "allergen_id") })
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Allergen> allergens = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY,
+    @ManyToMany(fetch = FetchType.EAGER,
             cascade = {
                     CascadeType.PERSIST,
                     CascadeType.MERGE
@@ -60,47 +74,21 @@ public class Recipe {
     @JoinTable(name = "recipe_diets",
             joinColumns = { @JoinColumn(name = "recipe_id") },
             inverseJoinColumns = { @JoinColumn(name = "diet_id") })
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Diet> diets = new HashSet<>();
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private Set<IngredientRecipe> IngredientRecipes ;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<IngredientRecipe> ingredientRecipes ;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Step> steps = new ArrayList<>();
-
-    public List<Step> getSteps() {
-        return steps;
-    }
-
-    public void setSteps(List<Step> steps) {
-        this.steps = steps;
-    }
-
-    public Set<IngredientRecipe> getIngredientRecipes() {
-        return IngredientRecipes;
-    }
-    public void setIngredientRecipes(Set<IngredientRecipe> ingredientRecipes) {
-        IngredientRecipes = ingredientRecipes;
-    }
-    public Set<Allergen> getAllergens() {
-        return allergens;
-    }
-    public void setAllergens(Set<Allergen> allergens) {
-        this.allergens = allergens;
-    }
-
-    public Set<Diet> getDiets() {
-        return diets;
-    }
-
-    public void setDiets(Set<Diet> diets) {
-        this.diets = diets;
-    }
-
 
     public long getId() {
         return id;
     }
+
     public String getRecipeName() {
         return recipeName;
     }
@@ -165,5 +153,35 @@ public class Recipe {
         this.description = description;
     }
 
+    public Set<Allergen> getAllergens() {
+        return allergens;
+    }
 
+    public void setAllergens(Set<Allergen> allergens) {
+        this.allergens = allergens;
+    }
+
+    public Set<Diet> getDiets() {
+        return diets;
+    }
+
+    public void setDiets(Set<Diet> diets) {
+        this.diets = diets;
+    }
+
+    public Set<IngredientRecipe> getIngredientRecipes() {
+        return ingredientRecipes;
+    }
+
+    public void setIngredientRecipes(Set<IngredientRecipe> ingredientRecipes) {
+        this.ingredientRecipes = ingredientRecipes;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
+    }
 }
