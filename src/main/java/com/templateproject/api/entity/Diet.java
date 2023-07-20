@@ -24,9 +24,9 @@ public class Diet {
                     CascadeType.MERGE
             },
             mappedBy = "diets")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+private Set<Recipe> recipes = new HashSet<>();
 
-    private Set<Recipe> recipes = new HashSet<>();
     public long getId() {
         return id;
     }

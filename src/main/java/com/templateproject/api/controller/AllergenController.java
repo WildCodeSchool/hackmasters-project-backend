@@ -22,4 +22,6 @@ public class AllergenController {
     public List<Allergen> getAllAllergens() {
         return allergenRepository.findAll();
     }
+
+
 }

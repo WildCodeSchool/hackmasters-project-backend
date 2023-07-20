@@ -22,6 +22,17 @@ public class Recipe {
     @Column(name = "recipe_name")
     private String recipeName;
 
+    public String getRecipeSlug() {
+        return recipeSlug;
+    }
+
+    public void setRecipeSlug(String recipeSlug) {
+        this.recipeSlug = recipeSlug;
+    }
+
+    @Column(name = "recipe_slug")
+    private String recipeSlug;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -41,6 +52,7 @@ public class Recipe {
     @Column(name = "imgurl")
     private String imageUrl;
 
+
     private String description;
 
     @ManyToMany(fetch = FetchType.EAGER,
@@ -51,6 +63,7 @@ public class Recipe {
     @JoinTable(name = "recipe_allergens",
             joinColumns = { @JoinColumn(name = "recipe_id") },
             inverseJoinColumns = { @JoinColumn(name = "allergen_id") })
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Allergen> allergens = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER,
@@ -61,17 +74,17 @@ public class Recipe {
     @JoinTable(name = "recipe_diets",
             joinColumns = { @JoinColumn(name = "recipe_id") },
             inverseJoinColumns = { @JoinColumn(name = "diet_id") })
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Set<Diet> diets = new HashSet<>();
 
-//    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-//    private Set<IngredientRecipe> ingredientRecipes ;
-@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-private Set<IngredientRecipe> ingredientRecipes;
 
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Set<IngredientRecipe> ingredientRecipes ;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+
     private List<Step> steps = new ArrayList<>();
 
     public long getId() {

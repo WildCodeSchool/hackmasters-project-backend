@@ -2,9 +2,11 @@ package com.templateproject.api.controller;
 
 import com.templateproject.api.entity.IngredientRecipe;
 import com.templateproject.api.entity.Recipe;
-import com.templateproject.api.repository.RecipeRepository;
-import com.templateproject.api.repository.IngredientRecipeRepository;
+
+import com.templateproject.api.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -14,30 +16,41 @@ import java.util.stream.Collectors;
 @RequestMapping("/recipes")
 public class RecipeController {
 
-    final private RecipeRepository recipeRepository;
-    final private IngredientRecipeRepository IngredientRecipeRepository;
+final private RecipeRepository recipeRepository;
+final private IngredientRecipeRepository IngredientRecipeRepository;
+final private RecipesAllergensRepository recipesAllergensRepository;
+final private RecipeDietsRepository recipesDietsRepository;
 
-    public RecipeController(RecipeRepository recipeRepository, IngredientRecipeRepository IngredientRecipeRepository) {
+final private StepRepository stepRepository;
+
+public RecipeController(RecipeRepository recipeRepository,
+                        IngredientRecipeRepository IngredientRecipeRepository,
+                        RecipesAllergensRepository recipesAllergensRepository,
+                        RecipeDietsRepository recipesDietsRepository,
+                        StepRepository stepRepository)
+    {
         this.recipeRepository = recipeRepository;
         this.IngredientRecipeRepository = IngredientRecipeRepository;
+        this.recipesAllergensRepository = recipesAllergensRepository;
+        this.recipesDietsRepository = recipesDietsRepository;
+        this.stepRepository = stepRepository;
     }
 
-    // Get all recipes
 
     @GetMapping
     public List<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
     }
 
-    @GetMapping("/{recipeName}")
-    public ResponseEntity<Recipe> searchRecipesByExactName(@PathVariable("recipeName") String recipeName) {
-        Recipe recipes = recipeRepository.findByRecipeNameIgnoreCase(recipeName);
+    @GetMapping("/{recipeSlug}")
+    public ResponseEntity<Recipe> searchRecipesByExactName(@PathVariable("recipeSlug") String recipeName) {
+        Recipe recipes = recipeRepository.findByRecipeSlugIgnoreCase(recipeName);
         return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping("/name")
-    public ResponseEntity<List<Recipe>> searchRecipesByPartialName(@RequestParam("recipeName") String recipeName) {
-        List<Recipe> recipes = recipeRepository.findByRecipeNameContainingIgnoreCase(recipeName);
+    @GetMapping("/Slug")
+    public ResponseEntity<List<Recipe>> searchRecipesByPartialName(@RequestParam("recipeSlug") String recipeName) {
+        List<Recipe> recipes = recipeRepository.findByRecipeSlugContainingIgnoreCase(recipeName);
         return ResponseEntity.ok(recipes);
     }
 
@@ -134,6 +147,17 @@ public class RecipeController {
     }
 
 
+    @PostMapping()
+    public ResponseEntity<Recipe> addRecipe(@RequestBody Recipe recipe) {
+        Recipe newRecipe = recipeRepository.save(recipe);
+        return ResponseEntity.ok(newRecipe);
+    }
+
+    @DeleteMapping("/{recipeId}")
+    public void deleteRecipeById(@PathVariable("recipeId") long recipeId) {
+        recipeRepository.deleteById(recipeId);
+    }
 
 }
+
 
