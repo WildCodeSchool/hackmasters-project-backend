@@ -22,4 +22,6 @@ public class DietController {
     public List<Diet> getAllDiets() {
         return dietRepository.findAll();
     }
+
+
 }
