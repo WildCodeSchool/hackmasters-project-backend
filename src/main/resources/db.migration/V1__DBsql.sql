@@ -1,6 +1,64 @@
-ALTER TABLE users
-       DROP COLUMN name;
+ALTER TABLE recipes
+       ADD COLUMN recipe_slug VARCHAR(255);
 
+
+UPDATE recipes
+SET recipe_slug =
+        CASE id
+            WHEN 1 THEN 'Chocolate Cake'
+            WHEN 2 THEN 'Tiramisu'
+            WHEN 3 THEN 'Spaghetti Bolognese'
+            WHEN 4 THEN 'Guacamole'
+            WHEN 5 THEN 'Chicken Stir Fry'
+            WHEN 6 THEN 'Scrambled Egg'
+            WHEN 7 THEN 'Apple Pie'
+            WHEN 8 THEN 'Spicy Thai Basil Chicken'
+            WHEN 9 THEN 'Garlic Mashed Potatoes'
+            WHEN 10 THEN 'Vanilla Cupcakes'
+            WHEN 11 THEN 'Beef Troganoff'
+            WHEN 12 THEN 'Caprese Skewers'
+            WHEN 13 THEN 'Pancakes'
+            WHEN 14 THEN 'Chicken Parmesan'
+            WHEN 15 THEN 'Chocolate Chip Cookies'
+            WHEN 16 THEN 'Roasted Brussels Sprouts'
+            WHEN 17 THEN 'Sushi Rolls'
+            WHEN 18 THEN 'Moules Frites'
+            WHEN 19 THEN 'Veal Blanquette'
+            WHEN 20 THEN 'Strawberry Charlotte'
+            WHEN 21 THEN 'Spinach and Feta Stuffed Mushrooms'
+            WHEN 22 THEN 'Tomato and Basil Bruschetta'
+            WHEN 23 THEN 'Mini Vegetable Quiches'
+            WHEN 24 THEN 'Smoked Salmon and Cream Cheese Canapés'
+            WHEN 25 THEN 'Grilled Shrimp Skewers'
+            WHEN 26 THEN 'Vanilla Crème Brûlée'
+            WHEN 27 THEN 'Molten Chocolate Lava Cake'
+            WHEN 28 THEN 'Classic Tiramisu'
+            WHEN 29 THEN 'Light and Creamy Chocolate Mousse'
+            WHEN 30 THEN 'Mussels in Garlic and White Wine Sauce'
+            WHEN 31 THEN 'Vegetarian Spinach and Ricotta Lasagna'
+            WHEN 32 THEN 'Indian Chicken Tikka'
+            WHEN 33 THEN 'Seafood Risotto'
+            WHEN 34 THEN 'Stuffed Bell Peppers with Rice and Ground Meat'
+            WHEN 35 THEN 'Smoothie Bowl'
+            WHEN 36 THEN 'Fruit Yogurt with Granola'
+            WHEN 37 THEN 'Fruit Crepes'
+            WHEN 38 THEN 'Scrambled Eggs'
+            WHEN 39 THEN 'Green Smoothie'
+            WHEN 40 THEN 'Salmon Bagel'
+            WHEN 41 THEN 'Quinoa with Dried Fruits'
+            WHEN 42 THEN 'Sautéed Garlic Vegetables'
+            WHEN 43 THEN 'Cheesy Corn'
+            WHEN 44 THEN 'Spinach Salad'
+            WHEN 45 THEN 'Potato Pancakes'
+            WHEN 46 THEN 'Oven Roasted Green Beans'
+            WHEN 47 THEN 'Cornbread'
+            WHEN 48 THEN 'Crispy Bacon'
+            WHEN 49 THEN 'Chilled Tomato Soup'
+            WHEN 50 THEN 'Ranch Chicken Tacos'
+            END
+WHERE id IN
+      (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+       31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50);
 
 
 INSERT INTO allergens
@@ -299,7 +357,6 @@ VALUES (1, 'chocolate-cake', 5, 6, 20, 30, 20.00, 'https://images.pexels.com/pho
        (49, 'Chilled-Tomato-Soup', 4, 5, 10, 0, 5.00,
         'https://www.thespruceeats.com/thmb/FxTobUKOXKRm04EkO8lEJ2atR0A=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/gazpacho-andaluz-spanish-cold-tomato-soup-3083558-hero-01-8dd745933dff4d07924152b22f84ae55.jpg',
         'A refreshing and chilled soup made with ripe tomatoes, cucumber, red bell pepper, and a hint of garlic, offering a burst of summer flavors and a cool respite on hot days.');;
-
 
 
 

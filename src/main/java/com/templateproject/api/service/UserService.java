@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
-import java.util.logging.Logger;
+
 
 @Service
 @Transactional
@@ -28,7 +28,6 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
     private final TokenService tokenService;
-    private static final Logger logger = Logger.getLogger(UserService.class.getName());
 
     public UserService(
             UserRepository userRepository,
@@ -53,21 +52,13 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).get();
     }
 
-
     public User register(String password, String email, String firstName) {
-        // We want to encode the password before saving it to the database
         String encodedPassword = passwordEncoder.encode(password);
-        // We want to save the user with the role USER
         Role role = roleRepository.findByAuthority("ROLE_USER").orElseThrow(() -> new RuntimeException("ROLE_USER not found"));
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        // We want to create a new user
         User user = new User(encodedPassword, email, firstName, roles);
-
-        // Set the username to be the same as the email
         user.setUsername(email);
-
-        // We want to save the user to the database
         return userRepository.save(user);
     }
 
@@ -77,14 +68,10 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-
     public String login(String email, String password) {
         Authentication authentication = this.authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(email, password)
         );
         return tokenService.generateToken(authentication);
     }
-
-
-
-    }
+}

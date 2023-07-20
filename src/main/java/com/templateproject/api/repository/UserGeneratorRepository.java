@@ -2,7 +2,6 @@ package com.templateproject.api.repository;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import com.github.javafaker.Faker;
 import com.templateproject.api.entity.Role;
 import com.templateproject.api.entity.User;
@@ -51,7 +50,7 @@ public class UserGeneratorRepository implements CommandLineRunner {
         User admin = new User(
                 passwordEncoder.encode("password"),
                 faker.internet().emailAddress(),
-                "admin_first_name", // Replace this with an actual first name or leave it as is
+                "admin_first_name",
                 adminRoles
         );
         userRepository.save(user);

@@ -3,10 +3,8 @@ package com.templateproject.api.entity;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,8 +28,6 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     private Long id;
 
-//    @NotBlank(message = "Username is mandatory")
-//    @Size(min = 2, message = "Username must be at least 2 characters long")
     @Column (name = "username")
     private String username;
 
@@ -46,8 +42,7 @@ public class User implements UserDetails {
     @Column( name = "firstname")
     private String firstname;
 
-    //EAGER, will directly fetch the roles, longer loading time
-    //Mandatory for security users and roles management
+
     @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(
             name = "user_role_junction",

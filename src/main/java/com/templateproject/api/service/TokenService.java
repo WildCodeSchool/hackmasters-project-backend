@@ -23,24 +23,14 @@ public class TokenService {
         this.jwtEncoder = jwtEncoder;
         this.jwtSecret = Base64.getDecoder().decode("VzyVUCJujcNQi0iK8uSEVJc1MdjDkBx/E5ru+I0KoD8=");
     }
-    //Use Authentication class from security ???
+
     public String generateToken(Authentication auth) {
-        // We want to create a JWT token
-        // Choose and set the algorithm used to sign the token (here HS256) and build the header
         JwsHeader jwsHeader = JwsHeader.with(() -> "HS256").build();
-
-        // Retrieve the timestamp of the moment the token is created
         Instant now = Instant.now();
-
-        // We want to set the expiration date of the token to 30 days after its creation
         Instant expiration = now.plusSeconds(30 * 24 * 60 * 60);
-
-        // We want to set the scope of the token to the authorities of the user
         String scope = auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
-
-        // We want to set the claims of the token
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
@@ -49,8 +39,6 @@ public class TokenService {
                 .claim("scope", scope)
                 .claim("username", ((User) auth.getPrincipal()).getUserStringName())
                 .build();
-
-        // We want to encode the token with the header and the payload
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 
     }

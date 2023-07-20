@@ -32,8 +32,7 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    //Access to secret key from application.properties, available in the whole application
-    @Value("${your.jwt.secret}") // Replace with the actual property key for your jwt secret from your application.properties
+    @Value("${your.jwt.secret}")
     private String jwtSecret;
     @Bean
     public String jwtSecret() {
