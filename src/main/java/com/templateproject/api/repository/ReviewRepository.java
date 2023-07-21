@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewsUsers, Long> {
 
+    void deleteByRecipe_Id(Long recipeId);
+
+
 }

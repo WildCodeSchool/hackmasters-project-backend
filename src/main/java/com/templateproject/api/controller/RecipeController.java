@@ -9,6 +9,7 @@ import com.templateproject.api.entity.User;
 import com.templateproject.api.repository.*;
 import com.templateproject.api.views.Views;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -23,6 +24,10 @@ final private IngredientRecipeRepository IngredientRecipeRepository;
 final private RecipesAllergensRepository recipesAllergensRepository;
 final private RecipeDietsRepository recipesDietsRepository;
 
+final private CreateRecipeRepository createRecipeRepository;
+
+final private ReviewRepository reviewRepository;
+
 final private StepRepository stepRepository;
 
 final private FavoriteRecipeRepository favoriteRecipeRepository;
@@ -33,12 +38,14 @@ public RecipeController(RecipeRepository recipeRepository,
                         IngredientRecipeRepository IngredientRecipeRepository,
                         RecipesAllergensRepository recipesAllergensRepository,
                         RecipeDietsRepository recipesDietsRepository,
-                        StepRepository stepRepository, FavoriteRecipeRepository favoriteRecipeRepository, UserRepository userRepository)
+                        CreateRecipeRepository createRecipeRepository, ReviewRepository reviewRepository, StepRepository stepRepository, FavoriteRecipeRepository favoriteRecipeRepository, UserRepository userRepository)
     {
         this.recipeRepository = recipeRepository;
         this.IngredientRecipeRepository = IngredientRecipeRepository;
         this.recipesAllergensRepository = recipesAllergensRepository;
         this.recipesDietsRepository = recipesDietsRepository;
+        this.createRecipeRepository = createRecipeRepository;
+        this.reviewRepository = reviewRepository;
         this.stepRepository = stepRepository;
         this.favoriteRecipeRepository = favoriteRecipeRepository;
         this.userRepository = userRepository;
@@ -186,7 +193,16 @@ public RecipeController(RecipeRepository recipeRepository,
 
     @DeleteMapping("/{recipeId}")
     public void deleteRecipeById(@PathVariable("recipeId") long recipeId) {
-        recipeRepository.deleteById(recipeId);
+    recipeRepository.deleteById(recipeId);
+    }
+
+    @Transactional
+    @DeleteMapping("/additional/{recipeId}")
+    public ResponseEntity<?> deleteFavoriteByRecipeId(@PathVariable Long recipeId) {
+        reviewRepository.deleteByRecipe_Id(recipeId);
+        createRecipeRepository.deleteByRecipe_Id(recipeId);
+        favoriteRecipeRepository.deleteByRecipe_Id(recipeId);
+        return ResponseEntity.ok().build();
     }
 
 }

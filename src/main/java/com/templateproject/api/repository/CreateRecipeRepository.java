@@ -9,5 +9,6 @@ import java.util.Optional;
 @Repository
 public interface CreateRecipeRepository extends JpaRepository<CreateRecipe, Long> {
 
+    void deleteByRecipe_Id(Long recipeId);
     Optional<CreateRecipe> findByUserIdAndRecipeId(Long userId, Long recipeId);
 }
