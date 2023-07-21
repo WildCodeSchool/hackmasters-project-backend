@@ -1,7 +1,8 @@
 package com.templateproject.api.service;
+import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.Base64;
-
+@Service
 public class SecretGenerator {
     public static void main(String[] args) {
         SecureRandom random = new SecureRandom();

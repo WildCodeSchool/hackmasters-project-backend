@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.templateproject.api.views.Views;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "review_users")
 public class ReviewsUsers {
@@ -28,7 +30,7 @@ public class ReviewsUsers {
 
     @Column(name = "rating")
     @JsonView(Views.UserDetail.class)
-    private int rating;
+    private BigDecimal rating;
 
     public Long getId() {
         return id;
@@ -50,11 +52,11 @@ public class ReviewsUsers {
         this.comment = comment;
     }
 
-    public int getRating() {
+    public BigDecimal  getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(BigDecimal  rating) {
         this.rating = rating;
     }
 

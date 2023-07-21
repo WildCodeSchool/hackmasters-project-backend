@@ -1,5 +1,4 @@
 package com.templateproject.api.config;
-
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.jwk.source.JWKSource;
