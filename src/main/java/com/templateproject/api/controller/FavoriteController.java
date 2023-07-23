@@ -29,24 +29,32 @@ public class FavoriteController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<String> createFavoriteRecipe(@RequestParam long userId, @RequestParam long recipeId) {
+    public ResponseEntity<String> createOrUpdateFavoriteRecipe(@RequestParam long userId, @RequestParam long recipeId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
 
         if (optionalUser.isEmpty() || optionalRecipe.isEmpty()) {
-            return ResponseEntity.badRequest().body("");
+            return ResponseEntity.badRequest().body("Invalid user ID or recipe ID");
         }
+        User user = optionalUser.get();
+        Recipe recipe = optionalRecipe.get();
 
-        User user = optionalUser.orElse(null);
-        Recipe recipe = optionalRecipe.orElse(null);
+        Optional<FavoriteRecipes> existingFavoriteRecipe = favoriteRecipeRepository.findByUserAndRecipe(user, recipe);
 
-        FavoriteRecipes favoriteRecipe = new FavoriteRecipes();
-        favoriteRecipe.setUser(user);
-        favoriteRecipe.setRecipe(recipe);
-        favoriteRecipeRepository.save(favoriteRecipe);
-
-        return ResponseEntity.ok("");
+        if (existingFavoriteRecipe.isPresent()) {
+            // Si la relation existe, la supprimer
+            favoriteRecipeRepository.delete(existingFavoriteRecipe.get());
+            return ResponseEntity.ok("Favorite recipe removed");
+        } else {
+            // Si la relation n'existe pas, la créer
+            FavoriteRecipes favoriteRecipe = new FavoriteRecipes();
+            favoriteRecipe.setUser(user);
+            favoriteRecipe.setRecipe(recipe);
+            favoriteRecipeRepository.save(favoriteRecipe);
+            return ResponseEntity.ok("Favorite recipe added");
+        }
     }
+
     @GetMapping("/check")
     public ResponseEntity<Boolean> checkIfFavoriteExists(@RequestParam long userId, @RequestParam long recipeId) {
         boolean favoriteExists = favoriteRecipeRepository.existsByUserIdAndRecipeId(userId, recipeId);
