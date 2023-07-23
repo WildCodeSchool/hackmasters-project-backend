@@ -1,5 +1,5 @@
-ALTER TABLE recipes
-       ADD COLUMN recipe_slug VARCHAR(255);
+
+DROP TABLE IF EXISTS "user";
 
 
 UPDATE recipes

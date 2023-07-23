@@ -4,57 +4,57 @@ import java.util.HashSet;
 import java.util.Set;
 import com.github.javafaker.Faker;
 import com.templateproject.api.entity.Role;
-import com.templateproject.api.entity.User;
+import com.templateproject.api.entity.Users;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 
 @Component
-public class UserGeneratorRepository implements CommandLineRunner {
-    private final UserRepository userRepository;
+public class UsersGeneratorRepository implements CommandLineRunner {
+    private final UsersRepository usersRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final Faker faker = new Faker();
-    public UserGeneratorRepository(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public UsersGeneratorRepository(UsersRepository usersRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+        this.usersRepository = usersRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        if(userRepository.count() > 0) {
+        if(usersRepository.count() > 0) {
             return;
         }
 
-        Role userRole = new Role("ROLE_USER");
+        Role usersRole = new Role("ROLE_users");
         Role adminRole = new Role("ROLE_ADMIN");
-        userRole = roleRepository.save(userRole);
+        usersRole = roleRepository.save(usersRole);
         adminRole = roleRepository.save(adminRole);
 
 
-        Set<Role> userRoles = new HashSet<>();
-        userRoles.add(userRole);
+        Set<Role> usersRoles = new HashSet<>();
+        usersRoles.add(usersRole);
 
         Set<Role> adminRoles = new HashSet<>();
-        adminRoles.add(userRole);
+        adminRoles.add(usersRole);
         adminRoles.add(adminRole);
 
-        User user = new User(
+        Users users = new Users(
                 passwordEncoder.encode("password"),
                 faker.internet().emailAddress(),
-                "user_first_name", // Replace this with an actual first name or leave it as is
-                userRoles
+                "users_first_name",
+                usersRoles
         );
-        User admin = new User(
+        Users admin = new Users(
                 passwordEncoder.encode("password"),
                 faker.internet().emailAddress(),
                 "admin_first_name",
                 adminRoles
         );
-        userRepository.save(user);
-        userRepository.save(admin);
+        usersRepository.save(users);
+        usersRepository.save(admin);
     }
 
 }

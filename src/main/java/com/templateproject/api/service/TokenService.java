@@ -3,7 +3,8 @@ package com.templateproject.api.service;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.stream.Collectors;
-import com.templateproject.api.entity.User;
+
+import com.templateproject.api.entity.Users;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -21,7 +22,7 @@ public class TokenService {
 
     public TokenService(JwtEncoder jwtEncoder) {
         this.jwtEncoder = jwtEncoder;
-        this.jwtSecret = Base64.getDecoder().decode("VzyVUCJujcNQi0iK8uSEVJc1MdjDkBx/E5ru+I0KoD8=");
+        this.jwtSecret = Base64.getDecoder().decode("pHrtq0A+sBj06U/WjJztt07uUSnPhtLycZYCTXJQgEw=");
     }
 
     public String generateToken(Authentication auth) {
@@ -37,7 +38,7 @@ public class TokenService {
                 .expiresAt(expiration)
                 .subject(auth.getName())
                 .claim("scope", scope)
-                .claim("username", ((User) auth.getPrincipal()).getUserStringName())
+                .claim("usersname", ((Users) auth.getPrincipal()).getUsername())
                 .build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 
