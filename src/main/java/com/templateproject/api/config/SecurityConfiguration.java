@@ -56,13 +56,34 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/auth/**", "/swagger-ui/**", "/v3/**").permitAll();
+                    auth.requestMatchers("/auth/**", "/swagger-ui/**", "/v3/**", "/users/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/recipes/**").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/recipes/**").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/auth/**").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/auth/**").authenticated();
-                    auth.requestMatchers( "/users/**").hasAuthority("SCOPE_ROLE_ADMIN");
+                    auth.requestMatchers(HttpMethod.POST, "/users/**").authenticated();
+                    auth.requestMatchers(HttpMethod.POST, "/ingredients-recipe").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/recipesallergens").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/recipesdiets").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/steps").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/recipes").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/{recipeSlug}").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/Slug").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/country").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/category").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/ingredients").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/Diet").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/Allergen").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/search").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/{recipeId}").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/ingredients").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/diets").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/countries").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/categories").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/allergens").permitAll();
+                    auth.requestMatchers("/users/**").hasAuthority("SCOPE_ROLE_ADMIN");
                     auth.anyRequest().authenticated();
                 })
-
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
