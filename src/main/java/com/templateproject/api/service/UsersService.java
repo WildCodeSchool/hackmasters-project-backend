@@ -82,8 +82,7 @@ public class UsersService implements UserDetailsService {
             );
             return tokenService.generateToken(authentication);
         } catch (Exception e) {
-            // Log the error or exception details here
-            throw e; // Rethrow the exception if needed
+            throw e;
         }
     }
 }

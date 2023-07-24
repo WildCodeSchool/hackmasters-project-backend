@@ -42,11 +42,9 @@ public class FavoriteController {
         Optional<FavoriteRecipes> existingFavoriteRecipe = favoriteRecipeRepository.findByUsersAndRecipe(user, recipe);
 
         if (existingFavoriteRecipe.isPresent()) {
-            // Si la relation existe, la supprimer
             favoriteRecipeRepository.delete(existingFavoriteRecipe.get());
             return ResponseEntity.ok("Favorite recipe removed");
         } else {
-            // Si la relation n'existe pas, la créer
             FavoriteRecipes favoriteRecipe = new FavoriteRecipes();
             favoriteRecipe.setUser(user);
             favoriteRecipe.setRecipe(recipe);
@@ -68,13 +66,13 @@ public class FavoriteController {
         Optional<FavoriteRecipes> optionalFavoriteRecipe = favoriteRecipeRepository.findByRecipeIdAndUsersId(recipeId, userId);
 
         if (optionalFavoriteRecipe.isEmpty()) {
-            return ResponseEntity.badRequest().body("Favorite_recipe introuvable pour l'utilisateur donné et l'ID de recette donné.");
+            return ResponseEntity.badRequest().body("Favorite_recipe not found for the given user and recipe ID.");
         }
 
         FavoriteRecipes favoriteRecipe = optionalFavoriteRecipe.get();
         favoriteRecipeRepository.delete(favoriteRecipe);
 
-        return ResponseEntity.ok("Favorite_recipe supprimé avec succès.");
+        return ResponseEntity.ok("Favorite_recipe delete.");
     }
 
 }
