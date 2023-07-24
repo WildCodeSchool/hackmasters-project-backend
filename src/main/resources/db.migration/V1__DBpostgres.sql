@@ -1,7 +1,3 @@
-ALTER TABLE recipes
-       ADD COLUMN recipe_slug VARCHAR(255);
-
-
 UPDATE recipes
 SET recipe_slug =
         CASE id
@@ -433,7 +429,7 @@ VALUES (1, 1, 2),
        (36, 49, 2);
 
 
-INSERT INTO "recipes_ingredients" (id, recipe_id, ingredient_id, quantity)
+INSERT INTO recipes_ingredients (id, recipe_id, ingredient_id, quantity)
 VALUES (1, 1, 62, '200 gr'),
        (2, 1, 65, '200 gr'),
        (3, 1, 24, '4'),
