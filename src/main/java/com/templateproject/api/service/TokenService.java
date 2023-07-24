@@ -3,7 +3,7 @@ package com.templateproject.api.service;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.stream.Collectors;
-import com.templateproject.api.entity.User;
+import com.templateproject.api.entity.Users;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -37,7 +37,7 @@ public class TokenService {
                 .expiresAt(expiration)
                 .subject(auth.getName())
                 .claim("scope", scope)
-                .claim("username", ((User) auth.getPrincipal()).getUserStringName())
+                .claim("username", ((Users) auth.getPrincipal()).getUsersStringName())
                 .build();
         return this.jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 

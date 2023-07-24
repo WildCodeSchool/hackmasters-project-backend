@@ -17,7 +17,7 @@ public class ReviewsUsers {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonView(Views.UserDetail.class)
-    private User user;
+    private Users user;
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
@@ -36,7 +36,7 @@ public class ReviewsUsers {
         return id;
     }
 
-    public User getUser() {
+    public Users getUser() {
         return user;
     }
 
@@ -60,8 +60,8 @@ public class ReviewsUsers {
         this.rating = rating;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Users users) {
+        this.user = users;
     }
 
     public void setRecipe(Recipe recipe) {
