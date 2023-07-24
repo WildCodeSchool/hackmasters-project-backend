@@ -2,6 +2,8 @@ package com.templateproject.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.templateproject.api.views.Views;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -11,12 +13,15 @@ import java.util.List;
 public class Step {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.UserDetail.class)
     private int id;
 
+    @JsonView(Views.UserDetail.class)
     private String stepDescription;
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonView(Views.UserDetail.class)
     private Recipe recipe;
 
     public Step() {
