@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface CreateRecipeRepository extends JpaRepository<CreateRecipe, Long> {
 
     void deleteByRecipe_Id(Long recipeId);
-    Optional<CreateRecipe> findByUserIdAndRecipeId(Long userId, Long recipeId);
+    Optional<CreateRecipe> findByUsersIdAndRecipeId(Long userId, Long recipeId);
 }

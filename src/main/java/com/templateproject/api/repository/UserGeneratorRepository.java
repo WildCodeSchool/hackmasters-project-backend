@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import com.github.javafaker.Faker;
 import com.templateproject.api.entity.Role;
-import com.templateproject.api.entity.User;
+import com.templateproject.api.entity.Users;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserGeneratorRepository implements CommandLineRunner {
-    private final UserRepository userRepository;
+    private final UsersRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final Faker faker = new Faker();
-    public UserGeneratorRepository(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public UserGeneratorRepository(UsersRepository usersRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = usersRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -41,13 +41,13 @@ public class UserGeneratorRepository implements CommandLineRunner {
         adminRoles.add(userRole);
         adminRoles.add(adminRole);
 
-        User user = new User(
+        Users user = new Users(
                 passwordEncoder.encode("password"),
                 faker.internet().emailAddress(),
                 "user_first_name", // Replace this with an actual first name or leave it as is
                 userRoles
         );
-        User admin = new User(
+        Users admin = new Users(
                 passwordEncoder.encode("password"),
                 faker.internet().emailAddress(),
                 "admin_first_name",

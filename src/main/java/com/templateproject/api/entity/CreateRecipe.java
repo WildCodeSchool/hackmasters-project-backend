@@ -12,23 +12,23 @@ public class CreateRecipe {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
 
-
     public long getId() {
         return id;
     }
 
-    public User getUser() {
-        return user;
+
+    public Users getUsers() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsers(Users users) {
+        this.users = users;
     }
 
     public Recipe getRecipe() {
