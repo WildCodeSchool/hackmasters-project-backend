@@ -79,10 +79,9 @@
         }
 
         @Override
-        public Collection<? extends GrantedAuthority> getAuthorities() {
+        public Set<Role> getAuthorities() {
             return this.authorities;
         }
-
         public void setAuthorities(Set<Role> authorities) {
             this.authorities = authorities;
         }
