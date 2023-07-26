@@ -61,6 +61,7 @@ public class SecurityConfiguration {
                     auth.requestMatchers(HttpMethod.POST, "/recipes/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/auth/**").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/auth/**").authenticated();
+                    auth.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/users/**").authenticated();
                     auth.requestMatchers(HttpMethod.POST, "/ingredients-recipe").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/recipesallergens").permitAll();

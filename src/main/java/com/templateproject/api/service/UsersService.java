@@ -10,8 +10,12 @@ import com.templateproject.api.entity.Users;
 import com.templateproject.api.repository.RoleRepository;
 import com.templateproject.api.repository.UsersRepository;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +24,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.mail.javamail.JavaMailSender; // Ajoutez cette ligne d'importation
+import java.util.Optional;
 
 
 @Service
@@ -31,42 +37,40 @@ public class UsersService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
     private final TokenService tokenService;
+    private final JavaMailSender emailSender;
 
     public UsersService(
             UsersRepository usersRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
             @Lazy AuthenticationManager authManager,
-            TokenService tokenService
+            TokenService tokenService,
+            JavaMailSender emailSender
     ) {
         this.usersRepository = usersRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.authManager = authManager;
         this.tokenService = tokenService;
+        this.emailSender = emailSender;
     }
 
     public List<Users> getUsers() {
         return usersRepository.findAll();
     }
 
-    public Users getUsers(Long id) { // Renamed 'getUsers' to 'getUser'
+    public Users getUser(Long id) { // Renamed 'getUsers' to 'getUser'
         return usersRepository.findById(id).orElse(null);
     }
 
-    public Users register(String password, String email, String firstName) {
-        String encodedPassword = passwordEncoder.encode(password);
-        Role role = roleRepository.findByAuthority("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("ROLE_users not found"));
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        Users users = new Users(encodedPassword, email, firstName, roles);
-        users.setUsersname(email);
-        return usersRepository.save(users);
-    }
-
-    public Optional<Users> getUsersByEmail(String email) {
-        return usersRepository.findByEmail(email);
+    public Users register(String email, String password, String firstname) {
+        Optional<Users> existingUserOptional = usersRepository.findByEmail(email);
+        if (existingUserOptional.isPresent()) {
+            throw new RuntimeException("User already exists");
+        }
+        Set<Role> roles = new HashSet<>(); // You may need to initialize roles based on your application logic
+        Users newUser = new Users(password, email, firstname, roles);
+        return usersRepository.save(newUser);
     }
 
     @Override
@@ -82,7 +86,32 @@ public class UsersService implements UserDetailsService {
             );
             return tokenService.generateToken(authentication);
         } catch (Exception e) {
-            throw e;
+            // Log the error or exception details here
+            throw e; // Rethrow the exception if needed
         }
+    }
+
+    public void sendPasswordResetEmail(String userEmail) {
+        MimeMessage message = emailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(userEmail);
+            helper.setSubject("Password Reset");
+
+            String emailContent = "<h3>Hello,</h3>"
+                    + "<p>You have requested a password reset. Click the link below to create a new password:</p>"
+                    + "<a href='http://your-website.com/reset-password?email=" + userEmail + "'>Create a new password</a>"
+                    + "<p>If you did not make this request, you can ignore this email.</p>";
+            helper.setText(emailContent, true);
+
+            emailSender.send(message);
+        } catch (MessagingException e) {
+            // Handle email sending errors here
+            e.printStackTrace();
+        }
+    }
+    public Users findByEmail(String email) {
+        return usersRepository.findByEmail(email)
+                .orElse(null);
     }
 }
