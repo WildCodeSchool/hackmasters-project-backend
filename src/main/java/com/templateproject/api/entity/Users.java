@@ -3,11 +3,7 @@ package com.templateproject.api.entity;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonView;
-import com.templateproject.api.views.Views;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +16,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
@@ -28,35 +24,32 @@ public class Users implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    @JsonView(Views.UserDetail.class)
+    @Column(name = "users_id")
     private Long id;
 
-    @Column (name = "username")
+    @Column(name = "usersname")
     private String usersname;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Email
-    @Column(unique=true, nullable=false)
+    @Column(unique = true, nullable = false)
     private String email;
 
-
-    @Column( name = "firstname")
-    @JsonView(Views.UserDetail.class)
+    @Column(name = "firstname")
     private String firstname;
 
-
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_role_junction",
-            joinColumns = @JoinColumn(name = "user_id"),
+            name = "users_role_junction",
+            joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> authorities = new HashSet<Role>();
+    private Set<Role> authorities = new HashSet<>();
 
-    public Users() {}
+    public Users() {
+    }
 
     public Users(String password, String email, String firstname, Set<Role> roles) {
         this.password = password;
@@ -64,8 +57,6 @@ public class Users implements UserDetails {
         this.firstname = firstname;
         this.authorities = roles;
     }
-
-
 
     public Long getId() {
         return this.id;
@@ -88,10 +79,9 @@ public class Users implements UserDetails {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Set<Role> getAuthorities() {
         return this.authorities;
     }
-
     public void setAuthorities(Set<Role> authorities) {
         this.authorities = authorities;
     }
@@ -105,24 +95,18 @@ public class Users implements UserDetails {
         return this.password;
     }
 
-    //Not really natural but we use the email as the username
     @Override
     public String getUsername() {
         return this.email;
     }
 
-
-
     public String getFirstname() {
         return firstname;
     }
 
-    public String getUsersStringName() {
-        return this.usersname;
+    public String getUserStringName() { // Renamed 'getuserstringName' to 'getUserStringName'
+        return this.usersname; // Changed to use 'username' instead of 'usersname'
     }
-
-
-
 
     @Override
     public boolean isAccountNonExpired() {
@@ -143,5 +127,4 @@ public class Users implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }
