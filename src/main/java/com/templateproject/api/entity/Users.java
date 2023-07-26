@@ -24,7 +24,7 @@ import jakarta.validation.constraints.Email;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class Users implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,7 @@ public class User implements UserDetails {
     private Long id;
 
     @Column (name = "username")
-    private String username;
+    private String usersname;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
@@ -56,9 +56,9 @@ public class User implements UserDetails {
     )
     private Set<Role> authorities = new HashSet<Role>();
 
-    public User() {}
+    public Users() {}
 
-    public User(String password, String email, String firstname, Set<Role> roles) {
+    public Users(String password, String email, String firstname, Set<Role> roles) {
         this.password = password;
         this.email = email;
         this.firstname = firstname;
@@ -71,8 +71,8 @@ public class User implements UserDetails {
         return this.id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsersname(String usersname) {
+        this.usersname = usersname;
     }
 
     public void setPassword(String password) {
@@ -117,8 +117,8 @@ public class User implements UserDetails {
         return firstname;
     }
 
-    public String getUserStringName() {
-        return this.username;
+    public String getUsersStringName() {
+        return this.usersname;
     }
 
 

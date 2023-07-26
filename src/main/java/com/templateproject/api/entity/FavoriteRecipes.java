@@ -13,7 +13,7 @@ public class FavoriteRecipes {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
@@ -27,12 +27,12 @@ public class FavoriteRecipes {
         return id;
     }
 
-    public User getUser() {
-        return user;
+    public Users getUser() {
+        return users;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(Users users) {
+        this.users = users;
     }
 
     public Recipe getRecipe() {

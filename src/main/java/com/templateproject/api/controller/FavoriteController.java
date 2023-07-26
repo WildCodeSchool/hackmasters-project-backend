@@ -3,10 +3,10 @@ package com.templateproject.api.controller;
 import com.templateproject.api.entity.CreateRecipe;
 import com.templateproject.api.entity.FavoriteRecipes;
 import com.templateproject.api.entity.Recipe;
-import com.templateproject.api.entity.User;
+import com.templateproject.api.entity.Users;
 import com.templateproject.api.repository.FavoriteRecipeRepository;
 import com.templateproject.api.repository.RecipeRepository;
-import com.templateproject.api.repository.UserRepository;
+import com.templateproject.api.repository.UsersRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,40 +16,46 @@ import java.util.Optional;
 @RequestMapping("/favorite")
 public class FavoriteController {
 
-    private final UserRepository userRepository;
+    private final UsersRepository usersRepository;
     private final RecipeRepository recipeRepository;
 
     private final FavoriteRecipeRepository favoriteRecipeRepository;
 
-    public FavoriteController(UserRepository userRepository, RecipeRepository recipeRepository, FavoriteRecipeRepository favoriteRecipeRepository) {
-        this.userRepository = userRepository;
+    public FavoriteController(UsersRepository usersRepository, RecipeRepository recipeRepository, FavoriteRecipeRepository favoriteRecipeRepository) {
+        this.usersRepository = usersRepository;
         this.recipeRepository = recipeRepository;
         this.favoriteRecipeRepository = favoriteRecipeRepository;
     }
 
 
     @PostMapping("/create")
-    public ResponseEntity<String> createFavoriteRecipe(@RequestParam long userId, @RequestParam long recipeId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
+    public ResponseEntity<String> createOrUpdateFavoriteRecipe(@RequestParam long userId, @RequestParam long recipeId) {
+        Optional<Users> optionalUser = usersRepository.findById(userId);
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
 
         if (optionalUser.isEmpty() || optionalRecipe.isEmpty()) {
-            return ResponseEntity.badRequest().body("");
+            return ResponseEntity.badRequest().body("Invalid user ID or recipe ID");
         }
+        Users user = optionalUser.get();
+        Recipe recipe = optionalRecipe.get();
 
-        User user = optionalUser.orElse(null);
-        Recipe recipe = optionalRecipe.orElse(null);
+        Optional<FavoriteRecipes> existingFavoriteRecipe = favoriteRecipeRepository.findByUsersAndRecipe(user, recipe);
 
-        FavoriteRecipes favoriteRecipe = new FavoriteRecipes();
-        favoriteRecipe.setUser(user);
-        favoriteRecipe.setRecipe(recipe);
-        favoriteRecipeRepository.save(favoriteRecipe);
-
-        return ResponseEntity.ok("");
+        if (existingFavoriteRecipe.isPresent()) {
+            favoriteRecipeRepository.delete(existingFavoriteRecipe.get());
+            return ResponseEntity.ok("Favorite recipe removed");
+        } else {
+            FavoriteRecipes favoriteRecipe = new FavoriteRecipes();
+            favoriteRecipe.setUser(user);
+            favoriteRecipe.setRecipe(recipe);
+            favoriteRecipeRepository.save(favoriteRecipe);
+            return ResponseEntity.ok("Favorite recipe added");
+        }
     }
+
     @GetMapping("/check")
     public ResponseEntity<Boolean> checkIfFavoriteExists(@RequestParam long userId, @RequestParam long recipeId) {
-        boolean favoriteExists = favoriteRecipeRepository.existsByUserIdAndRecipeId(userId, recipeId);
+        boolean favoriteExists = favoriteRecipeRepository.existsByUsersIdAndRecipeId(userId, recipeId);
         return ResponseEntity.ok(favoriteExists);
     }
 
@@ -57,16 +63,16 @@ public class FavoriteController {
 
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteFavoriteRecipe(@RequestParam long recipeId, @RequestParam long userId) {
-        Optional<FavoriteRecipes> optionalFavoriteRecipe = favoriteRecipeRepository.findByRecipeIdAndUserId(recipeId, userId);
+        Optional<FavoriteRecipes> optionalFavoriteRecipe = favoriteRecipeRepository.findByRecipeIdAndUsersId(recipeId, userId);
 
         if (optionalFavoriteRecipe.isEmpty()) {
-            return ResponseEntity.badRequest().body("Favorite_recipe introuvable pour l'utilisateur donné et l'ID de recette donné.");
+            return ResponseEntity.badRequest().body("Favorite_recipe not found for the given user and recipe ID.");
         }
 
         FavoriteRecipes favoriteRecipe = optionalFavoriteRecipe.get();
         favoriteRecipeRepository.delete(favoriteRecipe);
 
-        return ResponseEntity.ok("Favorite_recipe supprimé avec succès.");
+        return ResponseEntity.ok("Favorite_recipe delete.");
     }
 
 }

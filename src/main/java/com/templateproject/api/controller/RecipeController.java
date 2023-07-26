@@ -5,7 +5,7 @@ import com.templateproject.api.entity.FavoriteRecipes;
 import com.templateproject.api.entity.IngredientRecipe;
 import com.templateproject.api.entity.Recipe;
 
-import com.templateproject.api.entity.User;
+import com.templateproject.api.entity.Users;
 import com.templateproject.api.repository.*;
 import com.templateproject.api.views.Views;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +32,13 @@ final private StepRepository stepRepository;
 
 final private FavoriteRecipeRepository favoriteRecipeRepository;
 
-final private UserRepository userRepository;
+final private UsersRepository usersRepository;
 
 public RecipeController(RecipeRepository recipeRepository,
                         IngredientRecipeRepository IngredientRecipeRepository,
                         RecipesAllergensRepository recipesAllergensRepository,
                         RecipeDietsRepository recipesDietsRepository,
-                        CreateRecipeRepository createRecipeRepository, ReviewRepository reviewRepository, StepRepository stepRepository, FavoriteRecipeRepository favoriteRecipeRepository, UserRepository userRepository)
+                        CreateRecipeRepository createRecipeRepository, ReviewRepository reviewRepository, StepRepository stepRepository, FavoriteRecipeRepository favoriteRecipeRepository, UsersRepository usersRepository)
     {
         this.recipeRepository = recipeRepository;
         this.IngredientRecipeRepository = IngredientRecipeRepository;
@@ -48,7 +48,7 @@ public RecipeController(RecipeRepository recipeRepository,
         this.reviewRepository = reviewRepository;
         this.stepRepository = stepRepository;
         this.favoriteRecipeRepository = favoriteRecipeRepository;
-        this.userRepository = userRepository;
+        this.usersRepository = usersRepository;
     }
 
 
@@ -170,9 +170,9 @@ public RecipeController(RecipeRepository recipeRepository,
 
 
         if (userId != null) {
-            User user = userRepository.findById(userId).orElse(null);
-            if (user != null) {
-                List<FavoriteRecipes> userFavorites = favoriteRecipeRepository.findByUser(user);
+            Users users = usersRepository.findById(userId).orElse(null);
+            if (users != null) {
+                List<FavoriteRecipes> userFavorites = favoriteRecipeRepository.findByUsers(users);
                 List<Recipe> favoriteRecipes = userFavorites.stream()
                         .map(FavoriteRecipes::getRecipe)
                         .collect(Collectors.toList());
