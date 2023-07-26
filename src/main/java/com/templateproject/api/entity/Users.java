@@ -48,6 +48,15 @@ public class Users implements UserDetails {
     )
     private Set<Role> authorities = new HashSet<>();
 
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
+
+    private String resetToken;
     public Users() {
     }
 

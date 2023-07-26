@@ -94,14 +94,18 @@ public class UsersService implements UserDetailsService {
     public void sendPasswordResetEmail(String userEmail) {
         MimeMessage message = emailSender.createMimeMessage();
         try {
+            String resetToken = "test";
+            Users user = usersRepository.findByEmail(userEmail).get();
+            user.setResetToken(resetToken);
+            usersRepository.save(user);
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(userEmail);
             helper.setSubject("Password Reset");
 
             String emailContent = "<h3>Hello,</h3>"
                     + "<p>You have requested a password reset. Click the link below to create a new password:</p>"
-                    + "<a href='http://your-website.com/reset-password?email=" + userEmail + "'>Create a new password</a>"
-                    + "<p>If you did not make this request, you can ignore this email.</p>";
+                    + "<a href='http://localhost:4200/reset-password?email=" + userEmail + "&resetToken="+ resetToken + "'>Create a new password</a>"
+                    + "<p>If you did not make this requhostest, you can ignore this email.</p>";
             helper.setText(emailContent, true);
 
             emailSender.send(message);
@@ -109,6 +113,16 @@ public class UsersService implements UserDetailsService {
             // Handle email sending errors here
             e.printStackTrace();
         }
+    }
+
+    public Users resetPassword(String email, String resetToken, String password) {
+        Users user = usersRepository.findByEmail(email).get();
+        if (resetToken != null) {
+            user.setPassword(passwordEncoder.encode(password));
+            user.setResetToken(null);
+            usersRepository.save(user);
+        }
+        return user;
     }
     public Users findByEmail(String email) {
         return usersRepository.findByEmail(email)

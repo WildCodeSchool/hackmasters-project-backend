@@ -35,7 +35,7 @@ public class UsersController {
         }
     }
 
-    @PostMapping("/users/register")
+    @PostMapping("/users/create")
     public ResponseEntity<String> registerUser(@RequestBody Users users) {
         // Vérifier si l'email existe déjà dans la base de données
         Users existingUser = usersService.findByEmail(users.getEmail());
@@ -54,6 +54,13 @@ public class UsersController {
         usersService.sendPasswordResetEmail(email);
         return ResponseEntity.ok("Password reset email sent successfully!");
     }
+
+    @PutMapping("/auth/reset-password")
+    public ResponseEntity<String> validateResetPassword(@RequestParam String email, @RequestParam String resetToken, @RequestParam String password) {
+        usersService.resetPassword(email, resetToken, email);
+        return ResponseEntity.ok("Password reset email sent successfully!");
+    }
+
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody Users users) {
         System.out.println(users.getEmail());
